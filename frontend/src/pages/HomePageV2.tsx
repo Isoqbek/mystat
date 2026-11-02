@@ -14,7 +14,7 @@ import { USEFUL_RESOURCES } from "../config/publicMenu";
 import { useLang } from "../i18n/LangContext";
 import { UI } from "../i18n/ui";
 import useApi from "../hooks/useApi";
-import { useServiceStats } from "../components/catalog/useServiceStats";
+import { compactNumber, useServiceStats } from "../components/catalog/useServiceStats";
 import HomeAside, { NextRelease } from "../components/home/HomeAside";
 import TileArt, { hasTileArt } from "../components/home/TileArt";
 import SearchPanel from "../components/search/SearchPanel";
@@ -50,30 +50,27 @@ const TOPIC_ICONS: Record<string, LucideIcon> = {
 };
 const topicIcon = (slug: string): LucideIcon => TOPIC_ICONS[slug] ?? Database;
 
-function KeyIndicator({ it, icon: Icon }: { it: DashboardItem; icon: LucideIcon }) {
+function KeyIndicator({ it, icon }: { it: DashboardItem; icon: LucideIcon }) {
   const good = it.higher_is_better === null || it.change === null ? null : (it.change >= 0) === it.higher_is_better;
   const color = good === null ? "rgb(var(--ds-primary))" : good ? "rgb(var(--ds-success))" : "rgb(var(--ds-danger))";
-  const tone = good === null ? "text-mg-primary" : good ? "text-[rgb(var(--ds-success))]" : "text-[rgb(var(--ds-danger))]";
+  const pill = good === null ? "bg-[rgb(var(--ds-primary-soft))] text-mg-primary" : good ? "bg-[rgb(var(--ds-success-bg))] text-[rgb(var(--ds-success))]" : "bg-[rgb(var(--ds-danger-bg))] text-[rgb(var(--ds-danger))]";
   const Arrow = it.change !== null && it.change < 0 ? ArrowDownRight : ArrowUpRight;
   return (
-    <Link to={`/indicators/${it.key}`} className="group relative flex flex-col overflow-hidden rounded-mg border border-mg-border bg-mg-surface pt-4 transition hover:border-mg-primary/50 hover:shadow-md">
-      <span className="flex items-center justify-between gap-2 px-5">
-        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[rgb(var(--ds-primary-soft))] text-mg-primary" aria-hidden="true"><Icon className="h-[18px] w-[18px]" strokeWidth={1.8} /></span>
-        <span className="tnum rounded-md bg-[rgb(var(--ds-bg))] px-2 py-1 text-xs font-bold text-mg-muted">{it.period}{it.preliminary ? " · dastlabki" : ""}</span>
+    <Link to={`/indicators/${it.key}`} className="group relative flex flex-col overflow-hidden rounded-mg border border-mg-border bg-mg-surface p-4 pt-5 transition hover:border-mg-primary/50 hover:shadow-md">
+      <span className="absolute inset-x-0 top-0 h-1" style={{ background: color }} aria-hidden="true" />
+      <span className="flex items-start justify-between gap-2">
+        <IconChip icon={icon} size="sm" />
+        {it.change !== null && (
+          <span className={`tnum inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-bold ${pill}`}>
+            <Arrow className="h-3.5 w-3.5" aria-hidden="true" />{it.change > 0 ? "+" : ""}{fmtNum(it.change)} {it.change_kind === "pp" ? "p.p." : "%"}
+          </span>
+        )}
       </span>
-      <span className="mt-3 line-clamp-2 min-h-[40px] px-5 text-sm font-medium leading-5 text-mg-text" title={it.name}>{it.name}</span>
-      <span className="mt-2 px-5">
-        <span className="tnum text-[32px] font-extrabold leading-none tracking-tight text-mg-heading">{fmtNum(it.value)}</span>
-        <span className="ml-1.5 text-xs text-mg-muted">{it.unit}</span>
-      </span>
-      {it.change !== null && (
-        <span className={`tnum mt-2 inline-flex items-center gap-1 px-5 text-sm font-bold ${tone}`}>
-          <Arrow className="h-4 w-4" aria-hidden="true" />{it.change > 0 ? "+" : ""}{fmtNum(it.change)} {it.change_kind === "pp" ? "p.p." : "%"}
-          <span className="text-xs font-normal text-mg-muted">oldingi davrga nisbatan</span>
-        </span>
-      )}
-      {/* Mini grafik karta tagiga to'liq kenglikda yopishadi */}
-      <span className="mt-auto block pt-3"><Sparkline series={it.series} color={color} /></span>
+      <span className="mt-3 line-clamp-2 min-h-[40px] text-sm font-medium leading-snug text-mg-text" title={it.name}>{it.name}</span>
+      <span className="tnum mt-1 text-[30px] font-extrabold leading-none tracking-tight text-mg-heading">{fmtNum(it.value)}</span>
+      <span className="mt-1 text-xs text-mg-muted">{it.unit}</span>
+      <span className="mt-2"><Sparkline series={it.series} color={color} /></span>
+      <span className="mt-1 text-xs font-semibold text-mg-muted">{it.period}{it.preliminary ? " · dastlabki" : ""}</span>
     </Link>
   );
 }
@@ -157,24 +154,19 @@ export default function HomePageV2() {
         {/* Bitta qator: qidiruv | ko'p ishlatiladigan xizmatlar | aholi, ob-havo va e'lon */}
         <div className="relative grid gap-5 lg:grid-cols-[300px_1fr_300px] xl:grid-cols-[360px_1fr_340px]">
           <SearchPanel compact />
-          <section aria-labelledby="home-top" className="flex flex-col rounded-mg border border-mg-border bg-mg-surface p-5">
-            <div className="mb-3 flex items-baseline justify-between gap-3">
-              <h2 id="home-top" className="text-sm font-semibold uppercase tracking-wide text-mg-muted">Ko'p ishlatiladigan xizmatlar</h2>
-              <Link to="/popular" className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-mg-primary hover:underline">Barchasi<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
-            </div>
-            {/* Qatorlar balandligi yon panelga cho'ziladi: bo'sh joy qolmaydi, kartalar teng taqsimlanadi */}
-            <ul className="grid flex-1 auto-rows-fr grid-cols-1 gap-3 sm:grid-cols-2">
+          <section aria-labelledby="home-top" className="rounded-mg border border-mg-border bg-mg-surface p-5">
+            <h2 id="home-top" className="mb-3 text-sm font-semibold uppercase tracking-wide text-mg-muted">Ko'p ishlatiladigan xizmatlar</h2>
+            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
               {ranked.slice(0, 6).map((x) => (
-                <li key={x.number} className="h-full">
-                  <Link to={`/service/${x.number}`} className="group flex h-full min-h-[84px] items-center gap-3 rounded-mg border border-mg-border bg-mg-surface p-3 transition hover:border-mg-primary/60 hover:shadow-md">
-                    {/* Rasm yumaloq och fonda chapda, nom o'rtada, strelka o'ngda */}
-                    <span className="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full bg-[rgb(var(--ds-primary-soft))] ring-1 ring-inset ring-[rgb(var(--ds-border))]" aria-hidden="true">
-                      {hasTileArt(x.number)
-                        ? <TileArt number={x.number} className="h-[64px] w-[64px] transition-transform duration-300 group-hover:scale-110" />
-                        : <x.icon className="h-8 w-8 text-mg-primary" strokeWidth={1.6} />}
-                    </span>
-                    <span className="min-w-0 flex-1 text-[15px] font-semibold leading-snug text-mg-heading group-hover:text-mg-primary">{t(x.title)}</span>
-                    <ArrowRight className="h-4 w-4 shrink-0 text-mg-muted transition group-hover:translate-x-0.5 group-hover:text-mg-primary" aria-hidden="true" />
+                <li key={x.number}>
+                  <Link to={`/service/${x.number}`} className="group flex h-full flex-col items-center rounded-mg border border-mg-border bg-mg-bg px-2 pb-3 pt-2 text-center transition hover:border-mg-primary/50 hover:bg-mg-surface hover:shadow-sm">
+                    {hasTileArt(x.number)
+                      ? <span className="flex h-[76px] w-[76px] items-center justify-center"><TileArt number={x.number} className="h-[76px] w-[76px] transition-transform duration-300 group-hover:scale-105" /></span>
+                      : <span className="flex h-[76px] items-center"><IconChip icon={x.icon} /></span>}
+                    <span className="mt-1 text-[14px] font-semibold leading-snug text-mg-primary">{t(x.title)}</span>
+                    {usage[String(x.number)]?.usage ? (
+                      <span className="tnum mt-1.5 rounded-full bg-[rgb(var(--ds-primary-soft))] px-2.5 py-0.5 text-xs font-bold text-mg-primary" title="Foydalanish soni">{compactNumber(usage[String(x.number)].usage)}</span>
+                    ) : null}
                   </Link>
                 </li>
               ))}
