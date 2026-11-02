@@ -63,6 +63,8 @@ export function PublicHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
     <div className="bg-[rgb(var(--ds-brand))] text-[rgb(var(--ds-on-brand))]">
       <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-6" style={{ height: "var(--ds-header-height)" }}>
         <Link to="/" className="flex min-w-0 items-center gap-3" aria-label={`${t(UI.portalFull)} — ${t(UI.home)}`}>
+          <img src="/uzstat-logo.png" alt="" width={44} height={44} className="hidden h-11 w-11 shrink-0 rounded-full bg-white sm:block" />
+          <span className="hidden h-8 w-px bg-white/25 sm:block" aria-hidden="true" />
           <LogoMark size={40} tone="dark" />
           <span className="min-w-0 leading-tight">
             <span className="nav-case block truncate text-[13px] font-bold sm:text-sm lg:text-[15px]">{t(UI.portalLine1)}</span>
