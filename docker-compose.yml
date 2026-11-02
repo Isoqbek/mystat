@@ -100,6 +100,7 @@ services:
       context: ./frontend
       args:
         VITE_API_URL: /
+        VITE_PUBLIC_V2: "1"
     restart: unless-stopped
     environment:
       ADMIN_URL: ${ADMIN_URL:-markaz}
