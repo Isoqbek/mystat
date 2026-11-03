@@ -40,3 +40,14 @@ class LlmSuggestTests(SimpleTestCase):
         self.assertEqual(len(out), 1)
         self.assertEqual(out[0]["n"], 12)
         self.assertEqual(len(out[0]["t"]), 80)
+
+
+class ChatTextTests(SimpleTestCase):
+    @override_settings(LLM_BASE_URL="http://llm.test/v1", LLM_API_KEY="k", LLM_MODEL="m", LLM_TIMEOUT=5)
+    def test_chat_text_returns_trimmed_text(self):
+        with mock.patch("apps.common.llm.requests.post", return_value=_resp("  Salom!  ")):
+            self.assertEqual(llm.chat_text("sys", [{"role": "user", "content": "hi"}]), "Salom!")
+
+    @override_settings(LLM_BASE_URL="")
+    def test_chat_text_disabled(self):
+        self.assertIsNone(llm.chat_text("sys", [{"role": "user", "content": "hi"}]))

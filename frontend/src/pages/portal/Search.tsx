@@ -7,6 +7,7 @@ import { SERVICES, matchesFilters, normalizeQuery, serviceByNumber } from "../..
 import { translate, useLang, type I18nText } from "../../i18n/LangContext";
 import ServiceCard from "../../components/catalog/ServiceCard";
 import ServiceAccessNote from "../../components/catalog/ServiceAccessNote";
+import DataAgentPanel, { TRADE_INTENT } from "../../components/search/DataAgentPanel";
 import { useServiceStats } from "../../components/catalog/useServiceStats";
 import { SEARCH_TYPES } from "../../config/searchFilters";
 
@@ -168,6 +169,8 @@ export default function Search() {
           </button>
         ))}
       </div>
+
+      {q.trim().length >= 3 && TRADE_INTENT.test(q) && (!type || type === "services") && <DataAgentPanel query={q.trim()} />}
 
       {(ai.loading || ai.reply) && (
         <section className="mt-8 rounded-[20px] border border-mg-primary/30 bg-mg-info p-5" aria-labelledby="search-ai" aria-live="polite">

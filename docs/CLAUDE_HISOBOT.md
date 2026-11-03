@@ -20,7 +20,14 @@
 - Bosh sahifadagi "Eng ko'p foydalaniladigan xizmatlar" kartalari kattalashtirildi (muddat, narx/kirish, baho, foydalanish soni).
 - Qidiruv: ma'lumot (ko'rsatkich) bo'yicha izlash, tarif/kirish belgisi, mehmon uchun rol bo'yicha kirish, AI tavsiyasi (vLLM/Gemma, `docs/AI_QIDIRUV.md`).
 
+- **Tashqi savdo:** `/trade-flows` yangi KPI, savdo maslahatchisi (AI yoki qoidalar) va Word (.docx) hisobot (`advisor.py`).
+- **AI agent (pullik ma'lumot):** `apps/credits/agent.py`: so'rovni tushunadi, to'plamlarni topadi, narxlaydi; qabul qilsa hamyondan yechiladi, rad etsa taklif o'chadi; sotib olingan ma'lumot (davr bilan) qayta to'lovsiz ochiladi; tarix va yuklash. Arxitektura va xarajatlar: `docs/AI_AGENT_ARXITEKTURA.md`. Migratsiya `credits.0007_data_agent`.
+- **Chatbot** bosh sahifa hero'sida (`HeroChat`, `/api/common/chat/`).
+- **Deploy:** eski UI qolishi sabablari va to'g'ri joylash: `docs/SERVERGA_JOYLASH.md`. index.html `no-cache`, footerda `build <commit>`, `python-docx` requirements'ga qo'shildi.
+
 ## 5. Qolgan ishlar
+- Agent narx jadvalini egasi tasdiqlashi; bojxona ma'lumotini sotish huquqiy shartlari.
+- Serverda `LLM_*` ni sozlab Gemma bilan jonli tekshirish (chatbot, tavsiya, agent nomzod tavsiyasi).
 - Serverda `LLM_*` sozlash va AI tavsiyasini jonli tekshirish (lokalda LLM yo'q, AI o'chiq).
 - Mockup'dagi soxta bloklar (jonli hodisalar lentasi, ko'rsatkichlar tikeri) ataylab olinmadi: ular uchun haqiqiy ma'lumot manbasi kerak.
 - Ichki sahifalar (`/spheres`, `/service/:n`, `/check` va b.) yangi qobiq ichida ishlaydi, lekin kartalari hali eski uslubda. Birma-bir yangilash kerak.

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Activity, Clock, Layers, Search, Sparkles, Star, Wallet } from "lucide-react";
+import { Activity, Bot, Clock, Layers, Search, Sparkles, Star, Wallet } from "lucide-react";
 import { POPULAR, SERVICES, type Access, type ServiceCatalogItem } from "../config/serviceCatalog";
 import { SPHERES, sphereById } from "../config/spheres";
 import { POPULAR_QUERIES, searchUrl } from "../config/searchFilters";
@@ -9,6 +9,7 @@ import { useLang, type I18nText } from "../i18n/LangContext";
 import { UI } from "../i18n/ui";
 import { compactNumber, useServiceStats } from "../components/catalog/useServiceStats";
 import type { ServiceShortStats } from "../api/portal";
+import HeroChat from "../components/home/HeroChat";
 
 /**
  * "Shaffof xizmat pasporti" (Variant P) bosh sahifasi. Hamma xizmat `serviceCatalog.ts` dan o'qiladi (takroriy ro'yxat yo'q):
@@ -48,6 +49,7 @@ function Hero({ featured, stats, isSample }: { featured: ServiceCatalogItem[]; s
   const [q, setQ] = useState("");
   const [i, setI] = useState(0);
   const [hold, setHold] = useState(false);
+  const [chat, setChat] = useState(false);
 
   useEffect(() => {
     if (hold || featured.length < 2) return;
@@ -108,6 +110,10 @@ function Hero({ featured, stats, isSample }: { featured: ServiceCatalogItem[]; s
               <Link key={c} to={searchUrl(c)} className="rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs font-semibold text-white hover:bg-white/25 hover:no-underline">{c}</Link>
             ))}
           </div>
+          <button type="button" onClick={() => setChat(true)} className="inline-flex h-12 items-center gap-2.5 self-start rounded-full bg-white/95 px-5 text-[15px] font-bold text-[var(--p800)] shadow-[0_14px_28px_-14px_rgba(0,0,0,0.5)] hover:bg-white">
+            <Bot className="h-5 w-5" aria-hidden="true" />{t({ uz: "AI yordamchi bilan suhbat", ru: "Чат с ИИ-помощником" })}
+          </button>
+          <HeroChat open={chat} onClose={() => setChat(false)} />
         </div>
 
         {s && Icon && (

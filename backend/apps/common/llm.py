@@ -86,6 +86,26 @@ def chat_json(system, user, max_tokens=900, temperature=0.2):
     return _parse(content)
 
 
+def chat_text(system, messages, max_tokens=500, temperature=0.3):
+    """Suhbat: `messages` = [{role: user|assistant, content}]. -> matn yoki None (AI o'chiq / xato)."""
+    if not enabled():
+        return None
+    payload = {"model": settings.LLM_MODEL, "messages": [{"role": "system", "content": system}] + messages,
+               "max_tokens": max_tokens, "temperature": temperature}
+    headers = {"Content-Type": "application/json"}
+    if settings.LLM_API_KEY:
+        headers["Authorization"] = f"Bearer {settings.LLM_API_KEY}"
+    try:
+        r = requests.post(f"{settings.LLM_BASE_URL.rstrip('/')}/chat/completions", json=payload, headers=headers,
+                          timeout=settings.LLM_TIMEOUT)
+        r.raise_for_status()
+        text = r.json()["choices"][0]["message"]["content"]
+    except (requests.RequestException, KeyError, IndexError, ValueError) as exc:
+        log.warning("LLM chat bajarilmadi: %s", exc)
+        return None
+    return str(text or "").strip()[:1500] or None
+
+
 def suggest_services(query, catalog):
     """-> {"services": [n,...], "answer": str} yoki None (AI o'chiq / xato / yaroqsiz javob)."""
     if not enabled() or not catalog:
