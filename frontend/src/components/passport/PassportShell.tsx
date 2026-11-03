@@ -180,6 +180,32 @@ export default function PassportShell({ children }: { children: ReactNode }) {
     });
   };
 
+  // Bosh sahifada "Eng ko'p foydalaniladigan xizmatlar" ko'ringanda menyu to'liq ochiladi (tanlov saqlanmaydi);
+  // tepaga qaytilsa foydalanuvchi tanlagan holatga qaytadi.
+  useEffect(() => {
+    if (!home) return;
+    let raf = 0;
+    let target: HTMLElement | null = null;
+    const check = () => {
+      raf = 0;
+      target ??= document.getElementById("pp-top");
+      if (!target) return;
+      const reached = target.getBoundingClientRect().top < window.innerHeight * 0.65;
+      setOpen(reached ? true : readOpen());
+    };
+    const onScroll = () => {
+      if (!raf) raf = window.requestAnimationFrame(check);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    onScroll();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
+  }, [home]);
+
   // Ctrl+K / Cmd+K va sahifadagi qidiruv maydonlari yuboradigan `open-global-search`
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
