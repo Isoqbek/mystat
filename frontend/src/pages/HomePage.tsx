@@ -14,7 +14,7 @@ import SituationCard from "../components/catalog/SituationCard";
 import { useServiceStats } from "../components/catalog/useServiceStats";
 import DemoBadge from "../components/ui/DemoBadge";
 import { ActionCard, ExternalLink, SectionHeader } from "../components/ui";
-import HomePageV2 from "./HomePageV2";
+import HomePassport from "./HomePassport";
 
 function Section({ id, title, link, children, badge }: { id: string; title: string; link?: boolean; children: ReactNode; badge?: ReactNode }) {
   const { t } = useLang();
@@ -40,9 +40,9 @@ const USEFUL_LINKS = [
  * shaxsiy bloklar → Sohalar → Hayotiy vaziyatlar → Portal imkoniyatlari → Raqamlarda → Ommabop xizmatlar.
  * Fikr vidjeti va footer — MainLayout'da. 1-etapdagi statistik bloklar (banner, "O'zbekiston raqamlarda") `/statistics` da (MG-13).
  */
-/** UI_QAYTA_TUZISH.md H10: bosh sahifa v3 `VITE_PUBLIC_V2=1` bayrog'i ichida. */
+/** Standart: "Shaffof xizmat pasporti" bosh sahifasi. `VITE_LEGACY_UI=1` eski my.gov.uz bosh sahifasini qaytaradi. */
 export default function HomePage() {
-  return import.meta.env.VITE_PUBLIC_V2 === "1" ? <HomePageV2 /> : <LegacyHomePage />;
+  return import.meta.env.VITE_LEGACY_UI === "1" ? <LegacyHomePage /> : <HomePassport />;
 }
 
 function LegacyHomePage() {

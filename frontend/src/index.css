@@ -1,6 +1,7 @@
 @import "@fontsource-variable/inter";
 @import "./theme/tokens.css";
 @import "./theme/a11y.css";
+@import "./theme/passport.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
