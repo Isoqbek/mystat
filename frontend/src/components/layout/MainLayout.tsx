@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { AlertTriangle } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import PublicLayout from "./PublicLayout";
+import PassportShell from "../passport/PassportShell";
 import { useLang } from "../../i18n/LangContext";
 import { UI } from "../../i18n/ui";
 import FloatingSupport from "../FloatingSupport";
@@ -17,12 +17,12 @@ import TypoReporter from "./TypoReporter";
  * <main> → oxirgi o'zgarish sanasi va fikr vidjeti → Footer. Kabinet ham shu layout ichida (MG-12).
  * Kontent sidebar'dan o'ngda: 22px chekka + 268px doim ochiq sidebar, ichki bo'shliq 30px.
  */
-/** UI_QAYTA_TUZISH.md H10: ommaviy qobiq v2 `VITE_PUBLIC_V2=1` bayrog'i ichida; H12 da bayroq olib tashlanadi. */
-const PUBLIC_V2 = import.meta.env.VITE_PUBLIC_V2 === "1";
+/** "Shaffof xizmat pasporti" qobig'i — ommaviy sahifalar uchun standart. `VITE_LEGACY_UI=1` eski my.gov.uz qobig'ini qaytaradi. */
+const LEGACY_UI = import.meta.env.VITE_LEGACY_UI === "1";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
-  if (PUBLIC_V2 && !pathname.startsWith("/cabinet")) return <PublicLayout>{children}</PublicLayout>;
+  if (!LEGACY_UI && !pathname.startsWith("/cabinet")) return <PassportShell>{children}</PassportShell>;
   return <LegacyLayout>{children}</LegacyLayout>;
 }
 

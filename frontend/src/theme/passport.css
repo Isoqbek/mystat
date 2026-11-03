@@ -1,0 +1,48 @@
+/*
+ * "Shaffof xizmat pasporti" (Variant P) dizayni: ommaviy qobiq va bosh sahifa.
+ * Brend ranglari (`--p*`, `--btn`) shu yerda; yuza/matn/chegara `--ds-*` tokenlaridan — tungi rejim ishlaydi.
+ * Palitra: "Bayroq ko'ki" (mockup'dagi asosiy variant).
+ */
+.pp {
+  --btn: #0077a0; --p700: #00668a; --p800: #004e6b; --pacc: #0099b5;
+  --p50: #e8f8fb; --p100: #d4f1f7; --p200: #a6e1ee;
+  --pp-bg: rgb(var(--ds-bg));
+  --pp-card: rgb(var(--ds-surface));
+  --pp-text: rgb(var(--ds-text));
+  --pp-muted: rgb(var(--ds-text-muted));
+  --pp-line: rgb(var(--ds-border));
+  --pp-soft: color-mix(in srgb, rgb(var(--ds-text)) 5%, rgb(var(--ds-surface)));
+  --pp-ink: #1b2530;
+  font-family: "Onest", "Inter Variable", system-ui, sans-serif;
+  background: var(--pp-bg);
+  color: var(--pp-text);
+}
+.dark .pp, [data-theme="dark"] .pp {
+  --btn: #2aa6cf; --p50: rgb(42 166 207 / 0.14); --p100: rgb(42 166 207 / 0.22); --p800: #7fd3ec;
+  --pp-ink: #0f1520;
+}
+.pp .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+.pp-flag { display: flex; height: 3px; }
+
+/* kartalar */
+.pp-card { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.pp-card:hover, .pp-card:focus-visible { transform: translateY(-3px); box-shadow: 0 18px 34px -16px rgb(27 37 48 / .28); border-color: var(--btn); outline: none; text-decoration: none; }
+.pp-nav-link:hover { background: var(--pp-soft); text-decoration: none; }
+.pp-sbi:hover > span:first-child { transform: scale(1.06); }
+.pp-sbi > span:first-child { transition: transform .15s ease, background .15s ease; }
+.pp-sbi .tip { position: absolute; left: calc(100% + 12px); top: 50%; transform: translateY(-50%); background: #1b2530; color: #fff; font-size: 13px; font-weight: 500; padding: 7px 11px; border-radius: 10px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .15s ease; z-index: 40; }
+.pp-sbi:hover .tip, .pp-sbi:focus-visible .tip { opacity: 1; }
+.pp-sbi:focus-visible, .pp-focus:focus-visible { outline: 2px solid var(--btn); outline-offset: 2px; }
+
+@keyframes pp-fu { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.pp-fu { animation: pp-fu .7s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes pp-slide { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+.pp-slide { animation: pp-slide .7s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes pp-marq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.pp-mq { display: flex; width: max-content; animation: pp-marq 90s linear infinite; }
+.pp-mqw:hover .pp-mq, .pp-mqw:focus-within .pp-mq { animation-play-state: paused; }
+@keyframes pp-flash { 0% { background: rgb(30 181 58 / .3); } 100% { background: transparent; } }
+.pp-flash { animation: pp-flash 1.4s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .pp-mq, .pp-fu, .pp-slide, .pp-flash { animation: none !important; }
+}
