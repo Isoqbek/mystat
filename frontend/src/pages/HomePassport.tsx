@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Sparkles } from "lucide-react";
+import { Clock, Search, Sparkles, Star } from "lucide-react";
 import { POPULAR, SERVICES, type Access, type ServiceCatalogItem } from "../config/serviceCatalog";
 import { SPHERES, sphereById } from "../config/spheres";
 import { POPULAR_QUERIES, searchUrl } from "../config/searchFilters";
@@ -164,36 +164,53 @@ function Hero({ featured, stats, isSample }: { featured: ServiceCatalogItem[]; s
 function TopServices({ items, stats, isSample }: { items: ServiceCatalogItem[]; stats: Record<string, ServiceShortStats>; isSample: boolean }) {
   const { t } = useLang();
   const max = Math.max(1, ...items.map((s) => stats[s.number]?.usage ?? 0));
+  const chip = "inline-flex items-center gap-1.5 rounded-full bg-[var(--pp-soft)] px-3 py-1 text-[13px] font-semibold";
   return (
-    <section aria-labelledby="pp-top" className="flex flex-col gap-3.5">
-      <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <div className="flex flex-col gap-0.5">
-          <h2 id="pp-top" className="m-0 text-[28px] font-extrabold tracking-[-0.03em]">{t({ uz: "Eng ko'p foydalaniladigan xizmatlar", ru: "Самые востребованные услуги" })}</h2>
-          <span className="text-[13px] text-[var(--pp-muted)]">
-            {t({ uz: "Foydalanishlar soni bo'yicha", ru: "По числу использований" })}{isSample ? ` · ${t({ uz: "namuna ma'lumot", ru: "образец данных" })}` : ""}
+    <section aria-labelledby="pp-top" className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div className="flex flex-col gap-1">
+          <h2 id="pp-top" className="m-0 text-[32px] font-extrabold tracking-[-0.03em]">{t({ uz: "Eng ko'p foydalaniladigan xizmatlar", ru: "Самые востребованные услуги" })}</h2>
+          <span className="text-[15px] text-[var(--pp-muted)]">
+            {t({ uz: "Foydalanuvchilar eng ko'p ochgan xizmatlar: reyting, narx va bajarish vaqti bilan.", ru: "Чаще всего открываемые услуги: рейтинг, цена и срок выполнения." })}
+            {isSample ? ` ${t({ uz: "(demo ma'lumot)", ru: "(демо-данные)" })}` : ""}
           </span>
         </div>
-        <span className="text-[13px] text-[var(--pp-muted)]">{items.length} {t({ uz: "ta xizmat", ru: "услуг" })}</span>
+        <Link to="/spheres" className="text-sm font-semibold">{t({ uz: "Barcha xizmatlar →", ru: "Все услуги →" })}</Link>
       </div>
-      <div className="grid gap-3.5 [grid-template-columns:repeat(auto-fit,minmax(270px,1fr))]">
+      <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))]">
         {items.map((s, n) => {
           const Icon = s.icon;
-          const use = stats[s.number]?.usage ?? 0;
+          const st = stats[s.number];
+          const use = st?.usage ?? 0;
+          const sphere = sphereById(s.sphere);
           return (
-            <Link key={s.number} to={`/service/${s.number}`} className={`${cardLink} pp-fu flex flex-col gap-3.5 p-[18px]`}>
-              <span className="flex items-start justify-between gap-2">
-                <span aria-hidden="true" className="flex h-[52px] w-[52px] items-center justify-center rounded-[18px] bg-[var(--btn)] text-white shadow-[0_8px_18px_-10px_var(--btn)]"><Icon className="h-6 w-6" strokeWidth={1.9} /></span>
-                <span className="mono rounded-full bg-[var(--p50)] px-2.5 py-1 text-xs font-bold text-[var(--p800)]">#{n + 1}</span>
+            <Link key={s.number} to={`/service/${s.number}`} className={`${cardLink} pp-fu flex min-h-[300px] flex-col gap-4 border-[var(--pp-line)] p-6`}>
+              <span className="flex items-start justify-between gap-3">
+                <span aria-hidden="true" className="flex h-16 w-16 items-center justify-center rounded-[22px] bg-[var(--btn)] text-white shadow-[0_10px_22px_-10px_var(--btn)]"><Icon className="h-8 w-8" strokeWidth={1.8} /></span>
+                <span className="flex flex-col items-end gap-1">
+                  <span className="mono rounded-full bg-[var(--p50)] px-3 py-1 text-sm font-bold text-[var(--p800)]">#{n + 1}</span>
+                  {sphere && <span className="max-w-[180px] truncate text-xs text-[var(--pp-muted)]">{t(sphere.title)}</span>}
+                </span>
               </span>
-              <span className="flex flex-col gap-1">
-                <span className="flex flex-wrap items-center gap-2 text-lg font-bold tracking-[-0.01em]">{t(s.title)}{s.status === "soon" && <Soon />}</span>
-                <span className="line-clamp-2 text-sm text-[var(--pp-muted)]">{t(s.description)}</span>
+              <span className="flex flex-col gap-2">
+                <span className="flex flex-wrap items-center gap-2 text-[22px] font-extrabold leading-tight tracking-[-0.02em]">{t(s.title)}{s.status === "soon" && <Soon />}</span>
+                <span className="line-clamp-3 text-[15px] leading-relaxed text-[var(--pp-muted)]">{t(s.description)}</span>
               </span>
-              <span className="mt-auto flex items-center justify-between gap-2">
-                <span className="mono text-xs text-[var(--pp-muted)]">{use ? `${compactNumber(use)} ${t({ uz: "marta", ru: "раз" })}` : t(s.duration)}</span>
-                <span className="text-sm font-bold text-[var(--btn)]">{t({ uz: "Boshlash →", ru: "Начать →" })}</span>
+              <span className="flex flex-wrap gap-2">
+                <span className={chip}><Clock className="h-4 w-4" aria-hidden="true" />{t(s.duration)}</span>
+                <span className={chip}>{t(ACCESS_SHORT[s.access])} · {t(ACCESS_NOTE[s.access])}</span>
+                {st?.rating != null && <span className={chip}><Star className="h-4 w-4 fill-current text-amber-500" aria-hidden="true" />{st.rating.toFixed(1)}</span>}
               </span>
-              <span className="block h-[5px] overflow-hidden rounded-full bg-[var(--pp-soft)]"><span className="block h-full rounded-full bg-[var(--btn)]" style={{ width: `${use ? Math.max(6, (use / max) * 100) : 6}%` }} /></span>
+              <span className="mt-auto flex flex-col gap-3">
+                <span className="flex flex-col gap-1.5">
+                  <span className="flex items-baseline justify-between text-[13px] text-[var(--pp-muted)]">
+                    <span>{t({ uz: "Foydalanishlar soni", ru: "Количество использований" })}</span>
+                    <span className="mono text-base font-bold text-[var(--pp-text)]">{use ? use.toLocaleString("ru-RU") : "—"}</span>
+                  </span>
+                  <span className="block h-2 overflow-hidden rounded-full bg-[var(--pp-soft)]"><span className="block h-full rounded-full bg-[var(--btn)]" style={{ width: `${use ? Math.max(6, (use / max) * 100) : 4}%` }} /></span>
+                </span>
+                <span className="flex h-12 items-center justify-center rounded-2xl bg-[var(--p50)] text-base font-extrabold text-[var(--p800)]">{t({ uz: "Xizmatdan foydalanish →", ru: "Перейти к услуге →" })}</span>
+              </span>
             </Link>
           );
         })}
