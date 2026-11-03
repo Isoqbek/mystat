@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Clock, Search, Sparkles, Star } from "lucide-react";
+import { Activity, Clock, Layers, Search, Sparkles, Star, Wallet } from "lucide-react";
 import { POPULAR, SERVICES, type Access, type ServiceCatalogItem } from "../config/serviceCatalog";
 import { SPHERES, sphereById } from "../config/spheres";
 import { POPULAR_QUERIES, searchUrl } from "../config/searchFilters";
@@ -240,6 +240,13 @@ function useCountUp(target: number, ms = 700) {
   return v;
 }
 
+const MIX_LABEL: Record<Access, I18nText> = {
+  open: { uz: "Kirishsiz", ru: "Без входа" },
+  login: { uz: "Kirish bilan", ru: "После входа" },
+  package: { uz: "Paket", ru: "Пакет" },
+  priced: { uz: "Pullik", ru: "Платно" },
+  credits: { uz: "Hamyondan", ru: "Из кошелька" },
+};
 const ACCESS_COLOR: Record<Access, string> = { open: "#1eb53a", login: "#33b6d1", package: "#0077a0", priced: "#f2b234", credits: "#e0408a" };
 
 /** Halqa diagramma: har qism `v` ulushi, `c` rangi. */
@@ -282,49 +289,78 @@ function Kpis({ list, stats, isSample }: { list: ServiceCatalogItem[]; stats: Re
   const { t } = useLang();
   const total = list.length;
   const free = list.filter((s) => s.access === "open" || s.access === "login").length;
-  const uses = list.reduce((a, s) => a + (stats[s.number]?.usage ?? 0), 0);
+  const usage = list.map((s) => stats[s.number]?.usage ?? 0);
+  const uses = usage.reduce((a, b) => a + b, 0);
   const rated = list.map((s) => stats[s.number]?.rating).filter((r): r is number => r != null);
   const avg = rated.length ? rated.reduce((a, b) => a + b, 0) / rated.length : 0;
   const soon = list.filter((s) => s.status === "soon").length;
   const nTotal = useCountUp(total);
   const nUses = useCountUp(uses, 900);
+  const nFree = useCountUp(total ? Math.round((free / total) * 100) : 0, 900);
   const mix = (Object.keys(ACCESS_COLOR) as Access[]).map((k) => ({ k, c: ACCESS_COLOR[k], v: list.filter((s) => s.access === k).length }));
-  const tile = "flex min-w-0 flex-col gap-3 rounded-[24px] border border-[var(--pp-line)] bg-[var(--pp-card)] p-5";
-  const label = "text-xs font-bold tracking-[0.1em] text-[var(--pp-muted)]";
+  const bars = [...usage].sort((a, b) => b - a).slice(0, 14);
+  const barMax = Math.max(1, ...bars);
+  const tile = "relative flex min-w-0 flex-col gap-3 overflow-hidden rounded-[26px] border border-[var(--pp-line)] bg-[var(--pp-card)] p-5 transition-shadow hover:shadow-[0_20px_40px_-24px_rgb(0_78_107/.45)]";
+  const label = "flex items-center gap-2 text-xs font-bold tracking-[0.1em] text-[var(--pp-muted)]";
+  const chipIcon = "flex h-8 w-8 items-center justify-center rounded-[11px] bg-[var(--p50)] text-[var(--p800)]";
   return (
-    <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(210px,1fr))]">
-      <div className={tile} style={{ background: "linear-gradient(135deg, var(--p800), var(--btn))", color: "#fff", borderColor: "transparent" }}>
-        <span className="text-xs font-bold tracking-[0.1em] text-white/80">{t({ uz: "XIZMATLAR", ru: "УСЛУГ" })}</span>
-        <span className="mono text-[56px] font-extrabold leading-none tracking-[-0.04em]">{nTotal}</span>
-        <span className="text-sm text-white/85">{soon ? t({ uz: `shundan ${soon} tasi tez orada`, ru: `из них ${soon} скоро` }) : t({ uz: "hammasi ishlayapti", ru: "все работают" })}</span>
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className={`${tile} text-white`} style={{ background: "linear-gradient(145deg, var(--p800) 0%, var(--btn) 70%, var(--pacc) 130%)", borderColor: "transparent" }}>
+        <svg aria-hidden="true" viewBox="0 0 200 200" className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 opacity-25">
+          <circle cx="100" cy="100" r="90" fill="none" stroke="#fff" strokeWidth="1.5" />
+          <circle cx="100" cy="100" r="62" fill="none" stroke="#fff" strokeWidth="1.5" strokeDasharray="3 6" />
+          <circle cx="100" cy="100" r="34" fill="#fff" fillOpacity=".25" />
+        </svg>
+        <span className="flex items-center gap-2 text-xs font-bold tracking-[0.1em] text-white/85"><Layers className="h-4 w-4" aria-hidden="true" />{t({ uz: "XIZMATLAR", ru: "УСЛУГ" })}</span>
+        <span className="mono relative text-[68px] font-extrabold leading-none tracking-[-0.05em]">{nTotal}</span>
+        <span className="relative inline-flex items-center gap-2 self-start rounded-full bg-white/15 px-3 py-1 text-[13px] font-semibold">
+          <span className="h-2 w-2 rounded-full bg-[#5be37a]" aria-hidden="true" />
+          {soon ? t({ uz: `${total - soon} ta ishlayapti · ${soon} tez orada`, ru: `${total - soon} работают · ${soon} скоро` }) : t({ uz: "hammasi ishlayapti", ru: "все работают" })}
+        </span>
       </div>
+
       <div className={tile}>
-        <span className={label}>{t({ uz: "TARIF VA NARX", ru: "ТАРИФ И ЦЕНА" })}</span>
+        <span className={label}><span className={chipIcon}><Wallet className="h-4 w-4" aria-hidden="true" /></span>{t({ uz: "TARIF VA NARX", ru: "ТАРИФ И ЦЕНА" })}</span>
         <div className="flex items-center gap-4">
-          <Ring parts={mix} />
-          <div className="flex min-w-0 flex-col">
-            <span className="mono text-[34px] font-extrabold leading-none tracking-[-0.03em]">{total ? Math.round((free / total) * 100) : 0}%</span>
-            <span className="text-[13px] text-[var(--pp-muted)]">{t({ uz: "bepul xizmat", ru: "бесплатных" })} ({free})</span>
+          <span className="relative flex shrink-0 items-center justify-center">
+            <Ring parts={mix} size={108} />
+            <span className="mono absolute text-[22px] font-extrabold tracking-[-0.03em]">{nFree}%</span>
+          </span>
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <span className="text-[15px] font-bold leading-tight">{t({ uz: "bepul xizmatlar", ru: "бесплатных услуг" })}</span>
+            <span className="text-[13px] text-[var(--pp-muted)]">{free} / {total}</span>
           </div>
         </div>
-        <span className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-[var(--pp-muted)]">
+        <span className="flex flex-wrap gap-1.5 text-xs">
           {mix.filter((m) => m.v > 0).map((m) => (
-            <span key={m.k} className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full" style={{ background: m.c }} />{t(ACCESS_SHORT[m.k])} {m.v}</span>
+            <span key={m.k} className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-semibold" style={{ background: `${m.c}22` }}>
+              <span className="h-2 w-2 rounded-full" style={{ background: m.c }} />{t(MIX_LABEL[m.k])} <span className="mono">{m.v}</span>
+            </span>
           ))}
         </span>
       </div>
+
       <div className={tile}>
-        <span className={label}>{t({ uz: "JAMI FOYDALANISH", ru: "ВСЕГО ИСПОЛЬЗОВАНИЙ" })}</span>
-        <span className="mono text-[40px] font-extrabold leading-none tracking-[-0.03em] text-[var(--btn)]">{uses ? nUses.toLocaleString("ru-RU") : "—"}</span>
+        <span className={label}><span className={chipIcon}><Activity className="h-4 w-4" aria-hidden="true" /></span>{t({ uz: "JAMI FOYDALANISH", ru: "ВСЕГО ИСПОЛЬЗОВАНИЙ" })}</span>
+        <span className="mono text-[44px] font-extrabold leading-none tracking-[-0.04em] text-[var(--btn)]">{uses ? nUses.toLocaleString("ru-RU") : "—"}</span>
+        {uses > 0 && (
+          <span className="flex h-14 items-end gap-[3px]" aria-hidden="true">
+            {bars.map((b, i) => (
+              <span key={i} className="flex-1 rounded-t-[4px] bg-[linear-gradient(180deg,var(--pacc),var(--btn))] transition-[height] duration-700" style={{ height: `${Math.max(8, (b / barMax) * 100)}%`, opacity: 1 - i * 0.04 }} />
+            ))}
+          </span>
+        )}
         <span className="text-[13px] text-[var(--pp-muted)]">
           {total && uses ? t({ uz: `o'rtacha ${Math.round(uses / total).toLocaleString("ru-RU")} marta / xizmat`, ru: `в среднем ${Math.round(uses / total).toLocaleString("ru-RU")} на услугу` }) : ""}
           {isSample ? ` · ${t({ uz: "demo", ru: "демо" })}` : ""}
         </span>
       </div>
+
       <div className={tile}>
-        <span className={label}>{t({ uz: "FOYDALANUVCHILAR BAHOSI", ru: "ОЦЕНКА ПОЛЬЗОВАТЕЛЕЙ" })}</span>
-        <div className="flex items-end gap-2"><span className="mono text-[40px] font-extrabold leading-none tracking-[-0.03em]">{avg ? avg.toFixed(1) : "—"}</span><span className="pb-1 text-sm text-[var(--pp-muted)]">/ 5</span></div>
+        <span className={label}><span className={chipIcon}><Star className="h-4 w-4" aria-hidden="true" /></span>{t({ uz: "FOYDALANUVCHILAR BAHOSI", ru: "ОЦЕНКА ПОЛЬЗОВАТЕЛЕЙ" })}</span>
+        <div className="flex items-end gap-2"><span className="mono text-[56px] font-extrabold leading-none tracking-[-0.04em]">{avg ? avg.toFixed(1) : "—"}</span><span className="pb-2 text-base text-[var(--pp-muted)]">/ 5</span></div>
         <Stars value={avg} />
+        <span className="block h-2 overflow-hidden rounded-full bg-[var(--pp-soft)]" aria-hidden="true"><span className="block h-full rounded-full bg-[linear-gradient(90deg,#f2b234,#ffe08a)] transition-[width] duration-700" style={{ width: `${(avg / 5) * 100}%` }} /></span>
         <span className="text-[13px] text-[var(--pp-muted)]">{rated.length} {t({ uz: "ta xizmat baholangan", ru: "услуг оценено" })}</span>
       </div>
     </div>
