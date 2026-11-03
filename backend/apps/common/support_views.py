@@ -8,6 +8,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+
+from . import llm
 from .models import Contact, ContactReply
 from .search import MIN_QUERY, assistant_answer, global_search
 
@@ -32,6 +35,36 @@ class AssistantAPIView(APIView):
         if not message.strip():
             return Response({"detail": "message bo'sh"}, status=status.HTTP_400_BAD_REQUEST)
         return Response(assistant_answer(message))
+
+
+class AiSearchThrottle(AnonRateThrottle):
+    """AI so'rovi qimmat: mehmonga daqiqada 10 ta, kirganga 30 ta."""
+    scope = "ai_search"
+    THROTTLE_RATES = {"ai_search": "10/min"}
+
+
+class AiSearchUserThrottle(UserRateThrottle):
+    scope = "ai_search_user"
+    THROTTLE_RATES = {"ai_search_user": "30/min"}
+
+
+class AiSearchAPIView(APIView):
+    """POST /api/common/ai-search/ {"q": "...", "catalog": [{"n": 101, "t": "nom", "d": "tavsif"}]}
+    -> {"enabled": bool, "services": [n...], "answer": "..."}. LLM sozlanmagan yoki xato bo'lsa enabled=false
+    (frontend oddiy qidiruvda qoladi)."""
+    permission_classes = [AllowAny]
+    throttle_classes = [AiSearchThrottle, AiSearchUserThrottle]
+
+    def post(self, request):
+        q = str(request.data.get("q", "")).strip()[: llm.MAX_QUERY]
+        if len(q) < 2:
+            return Response({"detail": "q juda qisqa"}, status=status.HTTP_400_BAD_REQUEST)
+        if not llm.enabled():
+            return Response({"enabled": False, "services": [], "answer": ""})
+        result = llm.suggest_services(q, llm.clean_catalog(request.data.get("catalog")))
+        if result is None:
+            return Response({"enabled": False, "services": [], "answer": ""})
+        return Response({"enabled": True, **result})
 
 
 class SupportStartSerializer(serializers.Serializer):

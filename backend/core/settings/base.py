@@ -17,6 +17,12 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 # production'da faqat .env da SYNTHETIC_DATA=True bo'lsa (egasining qarori, 2026-10-23).
 SYNTHETIC_DATA = config('SYNTHETIC_DATA', default=False, cast=bool)
 
+# Lokal LLM (vLLM, OpenAI-mos API) — qidiruvdagi "AI tavsiyasi". LLM_BASE_URL bo'sh bo'lsa AI o'chiq, oddiy qidiruv ishlaydi.
+LLM_BASE_URL = config('LLM_BASE_URL', default='')
+LLM_API_KEY = config('LLM_API_KEY', default='')
+LLM_MODEL = config('LLM_MODEL', default='google/gemma-4-26B-A4B-it')
+LLM_TIMEOUT = config('LLM_TIMEOUT', default=25, cast=int)
+
 # ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 ALLOWED_HOSTS = ['*']
 

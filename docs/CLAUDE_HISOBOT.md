@@ -16,7 +16,12 @@
   - `index.html`: Onest va IBM Plex Mono shriftlari qo'shildi.
 - Tekshiruv: tsc va eslint toza, vitest 55/55, brauzerda `/` va `/spheres` ko'zdan kechirildi.
 
+- **2026-11-03 (davomi):** 50 ta xizmat avtomatik tekshirildi (Playwright, mehmon va kirgan). Yuklanmaydigan 7 tasi olib tashlandi: 107, 108, 202, 402, 1002, 1003 (+201 Hisobot kalendari foydalanuvchi talabi bilan). Katalog 43 ta xizmat.
+- Bosh sahifadagi "Eng ko'p foydalaniladigan xizmatlar" kartalari kattalashtirildi (muddat, narx/kirish, baho, foydalanish soni).
+- Qidiruv: ma'lumot (ko'rsatkich) bo'yicha izlash, tarif/kirish belgisi, mehmon uchun rol bo'yicha kirish, AI tavsiyasi (vLLM/Gemma, `docs/AI_QIDIRUV.md`).
+
 ## 5. Qolgan ishlar
+- Serverda `LLM_*` sozlash va AI tavsiyasini jonli tekshirish (lokalda LLM yo'q, AI o'chiq).
 - Mockup'dagi soxta bloklar (jonli hodisalar lentasi, ko'rsatkichlar tikeri) ataylab olinmadi: ular uchun haqiqiy ma'lumot manbasi kerak.
 - Ichki sahifalar (`/spheres`, `/service/:n`, `/check` va b.) yangi qobiq ichida ishlaydi, lekin kartalari hali eski uslubda. Birma-bir yangilash kerak.
 - Mobil ko'rinish va tungi rejim brauzerda tekshirilmagan.
