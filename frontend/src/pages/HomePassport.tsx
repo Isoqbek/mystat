@@ -370,7 +370,6 @@ function AllServices({ stats, isSample }: { stats: Record<string, ServiceShortSt
     const base = sphere ? SERVICES.filter((s) => s.sphere === sphere || s.alsoIn?.includes(sphere)) : SERVICES;
     return [...base].sort((a, b) => (stats[b.number]?.usage ?? 0) - (stats[a.number]?.usage ?? 0) || (a.popularOrder ?? 99) - (b.popularOrder ?? 99) || a.number - b.number);
   }, [sphere, stats]);
-  const maxUse = Math.max(1, ...list.map((s) => stats[s.number]?.usage ?? 0));
   const count = (id: number) => SERVICES.filter((s) => s.sphere === id || s.alsoIn?.includes(id)).length;
   const tab = (on: boolean) => `pp-focus rounded-full px-3.5 py-2 text-[13px] font-semibold ${on ? "bg-[var(--btn)] text-white" : "text-[var(--pp-muted)] hover:bg-[var(--pp-soft)]"}`;
   return (
@@ -395,37 +394,9 @@ function AllServices({ stats, isSample }: { stats: Record<string, ServiceShortSt
         <Kpis list={list} stats={stats} isSample={isSample} />
         <SphereBars stats={stats} active={sphere} onPick={setSphere} />
       </div>
-      <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(250px,1fr))]">
-        {list.map((s) => {
-          const Icon = s.icon;
-          const st = stats[s.number];
-          const use = st?.usage;
-          return (
-            <Link key={s.number} to={`/service/${s.number}`} className={`${cardLink} flex flex-col gap-3 p-4`}>
-              <span className="flex items-start gap-3">
-                <span aria-hidden="true" className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-[14px] bg-[var(--p50)] text-[var(--p800)]"><Icon className="h-5 w-5" strokeWidth={1.9} /></span>
-                <span className="flex min-w-0 flex-1 flex-col gap-[3px]">
-                  <span className="flex flex-wrap items-center gap-1.5 text-[15px] font-bold leading-tight">{t(s.title)}{s.status === "soon" && <Soon />}</span>
-                  <span className="line-clamp-2 text-[13px] leading-snug text-[var(--pp-muted)]">{t(s.description)}</span>
-                </span>
-              </span>
-              <span className="mt-auto flex flex-col gap-2">
-                <span className="flex items-center justify-between gap-2 text-xs">
-                  <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-semibold" style={{ background: `${ACCESS_COLOR[s.access]}22` }}>
-                    <span className="h-2 w-2 rounded-full" style={{ background: ACCESS_COLOR[s.access] }} />{t(ACCESS_SHORT[s.access])}
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-[var(--pp-muted)]"><Clock className="h-3.5 w-3.5" aria-hidden="true" />{t(s.duration)}</span>
-                  {st?.rating != null && <span className="inline-flex items-center gap-1 font-semibold"><Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />{st.rating.toFixed(1)}</span>}
-                </span>
-                <span className="flex items-center gap-2">
-                  <span className="block h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--pp-soft)]"><span className="block h-full rounded-full bg-[var(--btn)]" style={{ width: `${use ? Math.max(5, (use / maxUse) * 100) : 0}%` }} /></span>
-                  <span className="mono w-14 text-right text-xs text-[var(--pp-muted)]">{use ? compactNumber(use) : ""}</span>
-                </span>
-              </span>
-            </Link>
-          );
-        })}
-      </div>
+      <Link to={sphere ? `/spheres/${sphere}` : "/spheres"} className="flex h-12 items-center justify-center rounded-2xl border border-[var(--pp-line)] bg-[var(--pp-card)] text-[15px] font-bold text-[var(--p800)] hover:bg-[var(--pp-soft)] hover:no-underline">
+        {sphere ? t({ uz: "Shu sohadagi xizmatlarni ochish →", ru: "Открыть услуги этой сферы →" }) : t({ uz: "Barcha xizmatlar ro'yxatini ochish →", ru: "Открыть полный список услуг →" })}
+      </Link>
     </section>
   );
 }
