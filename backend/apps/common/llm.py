@@ -62,6 +62,30 @@ def _parse(text):
     return data if isinstance(data, dict) else None
 
 
+def chat_json(system, user, max_tokens=900, temperature=0.2):
+    """Umumiy chaqiruv: JSON obyekt kutiladi. -> dict yoki None (AI o'chiq / xato / yaroqsiz javob)."""
+    if not enabled():
+        return None
+    payload = {
+        "model": settings.LLM_MODEL,
+        "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
+        "max_tokens": max_tokens,
+        "temperature": temperature,
+    }
+    headers = {"Content-Type": "application/json"}
+    if settings.LLM_API_KEY:
+        headers["Authorization"] = f"Bearer {settings.LLM_API_KEY}"
+    try:
+        r = requests.post(f"{settings.LLM_BASE_URL.rstrip('/')}/chat/completions", json=payload, headers=headers,
+                          timeout=settings.LLM_TIMEOUT)
+        r.raise_for_status()
+        content = r.json()["choices"][0]["message"]["content"]
+    except (requests.RequestException, KeyError, IndexError, ValueError) as exc:
+        log.warning("LLM so'rovi bajarilmadi: %s", exc)
+        return None
+    return _parse(content)
+
+
 def suggest_services(query, catalog):
     """-> {"services": [n,...], "answer": str} yoki None (AI o'chiq / xato / yaroqsiz javob)."""
     if not enabled() or not catalog:
