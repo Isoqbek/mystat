@@ -90,8 +90,8 @@ function Hero({ featured, stats, isSample }: { featured: ServiceCatalogItem[]; s
             {SERVICES.length} {t({ uz: "ta davlat xizmati · onlayn", ru: "государственных услуг · онлайн" })}
           </span>
           <h1 className="m-0 max-w-[820px] text-[clamp(36px,5vw,58px)] font-extrabold leading-none tracking-[-0.045em]">
-            {t({ uz: "Kerakli raqamni yozing — ", ru: "Введите нужную цифру — " })}
-            <span className="text-[#ffe08a]">{t({ uz: "qolganini biz topamiz.", ru: "остальное найдём мы." })}</span>
+            {t({ uz: "Katta ma’lumotlar, chuqur tahlil, ", ru: "Большие данные, глубокий анализ, " })}
+            <span className="text-[#ffe08a]">{t({ uz: "yagona manzil.", ru: "единый адрес." })}</span>
           </h1>
           <p className="m-0 max-w-[620px] text-lg text-white/90">
             {t({ uz: "Hisobot topshirish, korxonani tekshirish, rasmiy ko'rsatkichlar — bitta qidiruvda, bir necha soniyada.", ru: "Сдача отчётов, проверка предприятия, официальные показатели — в одном поиске, за секунды." })}
