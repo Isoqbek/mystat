@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Activity, Bot, Clock, Layers, Search, Sparkles, Star, Wallet } from "lucide-react";
 import { POPULAR, SERVICES, type Access, type ServiceCatalogItem } from "../config/serviceCatalog";
@@ -7,6 +7,7 @@ import { POPULAR_QUERIES, searchUrl } from "../config/searchFilters";
 import { SITUATIONS } from "../config/situations";
 import { useLang, type I18nText } from "../i18n/LangContext";
 import { UI } from "../i18n/ui";
+import { searchServices } from "../utils/serviceSearch";
 import { compactNumber, useServiceStats } from "../components/catalog/useServiceStats";
 import type { ServiceShortStats } from "../api/portal";
 import HeroChat from "../components/home/HeroChat";
@@ -44,9 +45,15 @@ function Soon() {
 }
 
 function Hero({ featured, stats, isSample }: { featured: ServiceCatalogItem[]; stats: Record<string, ServiceShortStats>; isSample: boolean }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
+  const [focus, setFocus] = useState(false);
+  const [active, setActive] = useState(-1);
+  const box = useRef<HTMLDivElement>(null);
+  const live = useMemo(() => SERVICES.filter((x) => x.status === "live"), []);
+  const found = useMemo(() => searchServices(live, q, lang, 8), [live, q, lang]);
+  const showList = focus && q.trim().length > 0;
   const [i, setI] = useState(0);
   const [hold, setHold] = useState(false);
   const [chat, setChat] = useState(false);
@@ -57,9 +64,25 @@ function Hero({ featured, stats, isSample }: { featured: ServiceCatalogItem[]; s
     return () => window.clearInterval(id);
   }, [hold, featured.length]);
 
+  useEffect(() => setActive(-1), [q]);
+  useEffect(() => {
+    const away = (e: MouseEvent) => { if (box.current && !box.current.contains(e.target as Node)) setFocus(false); };
+    document.addEventListener("mousedown", away);
+    return () => document.removeEventListener("mousedown", away);
+  }, []);
+
+  const open = (n: number) => { setFocus(false); navigate(`/service/${n}`); };
   const submit = (e: FormEvent) => {
     e.preventDefault();
+    if (showList && active >= 0 && found[active]) return open(found[active].number);
+    setFocus(false);
     navigate(searchUrl(q.trim()));
+  };
+  const onKey = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") { setFocus(false); return; }
+    if (!showList || !found.length) return;
+    if (e.key === "ArrowDown") { e.preventDefault(); setActive((v) => (v + 1) % found.length); }
+    if (e.key === "ArrowUp") { e.preventDefault(); setActive((v) => (v <= 0 ? found.length - 1 : v - 1)); }
   };
   const s = featured[i];
   const st = s ? stats[s.number] : undefined;
@@ -96,14 +119,47 @@ function Hero({ featured, stats, isSample }: { featured: ServiceCatalogItem[]; s
           <p className="m-0 max-w-[620px] text-lg text-white/90">
             {t({ uz: "Hisobot topshirish, korxonani tekshirish, rasmiy ko'rsatkichlar — bitta qidiruvda, bir necha soniyada.", ru: "Сдача отчётов, проверка предприятия, официальные показатели — в одном поиске, за секунды." })}
           </p>
-          <form onSubmit={submit} className="flex w-full gap-2 rounded-[20px] bg-white p-2 shadow-[0_22px_44px_-20px_rgba(0,0,0,0.55)]">
-            <span aria-hidden="true" className="flex w-12 shrink-0 items-center justify-center text-[var(--btn)]"><Search className="h-[22px] w-[22px]" /></span>
-            <label htmlFor="pp-q" className="sr-only">{t({ uz: "Xizmatlarni qidirish", ru: "Поиск услуг" })}</label>
-            <input id="pp-q" type="search" value={q} onChange={(e) => setQ(e.target.value)}
-              placeholder={t({ uz: "Masalan: hisobot topshirish, STIR bo'yicha tekshiruv, inflyatsiya", ru: "Например: сдача отчёта, проверка по ИНН, инфляция" })}
-              className="h-[60px] min-w-0 flex-1 rounded-xl border-0 bg-transparent px-2 text-lg text-[#1b2530] outline-none placeholder:text-[#6b7885]" />
-            <button type="submit" className="h-[60px] rounded-[14px] bg-[var(--btn)] px-6 text-base font-extrabold text-white hover:brightness-110 sm:px-8">{t({ uz: "Topish", ru: "Найти" })}</button>
-          </form>
+          <div ref={box} className="relative w-full">
+            <form onSubmit={submit} className="flex w-full gap-2 rounded-[20px] bg-white p-2 shadow-[0_22px_44px_-20px_rgba(0,0,0,0.55)]">
+              <span aria-hidden="true" className="flex w-12 shrink-0 items-center justify-center text-[var(--btn)]"><Search className="h-[22px] w-[22px]" /></span>
+              <label htmlFor="pp-q" className="sr-only">{t({ uz: "Xizmatlarni qidirish", ru: "Поиск услуг" })}</label>
+              <input id="pp-q" type="search" role="combobox" autoComplete="off" value={q} onChange={(e) => { setQ(e.target.value); setFocus(true); }}
+                onFocus={() => setFocus(true)} onKeyDown={onKey}
+                aria-expanded={showList} aria-controls="pp-q-list" aria-autocomplete="list"
+                aria-activedescendant={active >= 0 ? `pp-q-${found[active]?.number}` : undefined}
+                placeholder={t({ uz: "Masalan: hisobot topshirish, STIR bo'yicha tekshiruv, inflyatsiya", ru: "Например: сдача отчёта, проверка по ИНН, инфляция" })}
+                className="h-[60px] min-w-0 flex-1 rounded-xl border-0 bg-transparent px-2 text-lg text-[#1b2530] outline-none placeholder:text-[#6b7885]" />
+            </form>
+            {showList && (
+              <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-20 overflow-hidden rounded-2xl bg-white text-[#1b2530] shadow-[0_22px_44px_-16px_rgba(0,0,0,0.55)]">
+                <ul id="pp-q-list" role="listbox" aria-label={t({ uz: "Topilgan xizmatlar", ru: "Найденные услуги" })} className="m-0 max-h-[360px] list-none overflow-y-auto p-1.5">
+                  {found.map((x, n) => {
+                    const Ic = x.icon;
+                    return (
+                      <li key={x.number} id={`pp-q-${x.number}`} role="option" aria-selected={n === active}>
+                        <Link to={`/service/${x.number}`} onClick={() => setFocus(false)} onMouseEnter={() => setActive(n)}
+                          className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-[#1b2530] hover:no-underline ${n === active ? "bg-[var(--pp-soft)]" : ""}`}>
+                          <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--pp-soft)] text-[var(--btn)]"><Ic className="h-[18px] w-[18px]" /></span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-[15px] font-bold">{t(x.title)}</span>
+                            <span className="block truncate text-[13px] text-[#5a6673]">{t(x.description)}</span>
+                          </span>
+                          <span className="mono shrink-0 text-xs text-[#5a6673]">№ {x.number}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                  {!found.length && (
+                    <li role="presentation" className="px-3 py-4 text-sm text-[#5a6673]">{t({ uz: "Xizmat topilmadi. Boshqa so'z bilan urinib ko'ring yoki kengaytirilgan qidiruvdan foydalaning.", ru: "Услуга не найдена. Попробуйте другое слово или расширенный поиск." })}</li>
+                  )}
+                </ul>
+                <Link to={searchUrl(q.trim())} onClick={() => setFocus(false)} className="flex items-center justify-between gap-2 border-t border-[#e3e8ee] px-4 py-2.5 text-sm font-semibold text-[var(--btn)] hover:bg-[var(--pp-soft)] hover:no-underline">
+                  <span className="truncate">{t({ uz: "Barcha natijalar:", ru: "Все результаты:" })} «{q.trim()}»</span>
+                  <span aria-hidden="true">↵</span>
+                </Link>
+              </div>
+            )}
+          </div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[13px] text-white/85">{t({ uz: "Ko'p qidiriladi:", ru: "Часто ищут:" })}</span>
             {POPULAR_QUERIES.map((c) => (

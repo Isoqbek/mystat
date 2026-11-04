@@ -48,14 +48,14 @@ function useClock() {
   return `${p(tz.getHours())}:${p(tz.getMinutes())}:${p(tz.getSeconds())}`;
 }
 
-function Sidebar({ open, onToggle }: { open: boolean; onToggle: () => void }) {
+function Sidebar({ open, shown, onToggle }: { open: boolean; shown: boolean; onToggle: () => void }) {
   const { pathname } = useLocation();
   const { t } = useLang();
   const { isAuthenticated, user } = useAuth();
   return (
-    <aside aria-label={t({ uz: "Bo'limlar", ru: "Разделы" })}
-      style={{ width: open ? 252 : 80, flexBasis: open ? 252 : 80 }}
-      className="sticky top-4 hidden shrink-0 flex-col gap-3 self-start rounded-3xl border border-[var(--pp-line)] bg-[var(--pp-card)] p-3 transition-[width,flex-basis] duration-200 ease-out lg:flex">
+    <aside aria-label={t({ uz: "Bo'limlar", ru: "Разделы" })} aria-hidden={!shown}
+      style={shown ? { width: open ? 252 : 80, flexBasis: open ? 252 : 80 } : { width: 0, flexBasis: 0, marginRight: -16 }}
+      className={`sticky top-4 hidden shrink-0 flex-col gap-3 self-start overflow-hidden rounded-3xl border border-[var(--pp-line)] bg-[var(--pp-card)] transition-[width,flex-basis,margin,opacity] duration-200 ease-out lg:flex ${shown ? "p-3 opacity-100" : "invisible border-transparent p-0 opacity-0"}`}>
       <div className={`flex items-center gap-2 pb-1 ${open ? "justify-between" : "justify-center"}`}>
         {open && <span className="pp-fade pl-1.5 text-xs font-semibold tracking-[0.06em] text-[var(--pp-muted)]">{t({ uz: "MENYU", ru: "МЕНЮ" })}</span>}
         <button type="button" onClick={onToggle} aria-expanded={open} aria-label={open ? t({ uz: "Menyuni yig'ish", ru: "Свернуть меню" }) : t({ uz: "Menyuni ochish", ru: "Развернуть меню" })}
@@ -180,8 +180,9 @@ export default function PassportShell({ children }: { children: ReactNode }) {
     });
   };
 
-  // Bosh sahifada "Eng ko'p foydalaniladigan xizmatlar" ko'ringanda menyu to'liq ochiladi (tanlov saqlanmaydi);
-  // tepaga qaytilsa foydalanuvchi tanlagan holatga qaytadi.
+  // Bosh sahifaning birinchi ekranida menyu ko'rinmaydi; "Eng ko'p foydalaniladigan xizmatlar" ko'ringach ikonkalar bilan chiqadi.
+  // Yozuvli (kengaygan) holat faqat strelka tugmasi bilan ochiladi, avtomatik ochilmaydi. Ichki sahifalarda doim ko'rinadi.
+  const [reached, setReached] = useState(false);
   useEffect(() => {
     if (!home) return;
     let raf = 0;
@@ -190,8 +191,7 @@ export default function PassportShell({ children }: { children: ReactNode }) {
       raf = 0;
       target ??= document.getElementById("pp-top");
       if (!target) return;
-      const reached = target.getBoundingClientRect().top < window.innerHeight * 0.65;
-      setOpen(reached ? true : readOpen());
+      setReached(target.getBoundingClientRect().top < window.innerHeight * 0.65);
     };
     const onScroll = () => {
       if (!raf) raf = window.requestAnimationFrame(check);
@@ -205,6 +205,7 @@ export default function PassportShell({ children }: { children: ReactNode }) {
       if (raf) window.cancelAnimationFrame(raf);
     };
   }, [home]);
+  const shown = !home || reached;
 
   // Ctrl+K / Cmd+K va sahifadagi qidiruv maydonlari yuboradigan `open-global-search`
   useEffect(() => {
@@ -235,7 +236,7 @@ export default function PassportShell({ children }: { children: ReactNode }) {
         <AlertTriangle className="h-4 w-4 shrink-0" aria-hidden="true" />{t(UI.testMode)}
       </p>
       <div className="flex items-start gap-4 lg:p-4 lg:pr-0">
-        <Sidebar open={open} onToggle={toggle} />
+        <Sidebar open={open} shown={shown} onToggle={toggle} />
         <MobileSidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
         <div className="min-w-0 flex-1">
           <Header onOpenMenu={() => setMenuOpen(true)} onSearch={() => setSearchOpen(true)} />
