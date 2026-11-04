@@ -18,6 +18,7 @@ import TradeSearch from "../components/externalTrade/TradeSearch";
 import DataQualityNote from "../components/externalTrade/DataQualityNote";
 import TradeAdvisor from "../components/externalTrade/TradeAdvisor";
 import TradeKpiBand from "../components/externalTrade/TradeKpiBand";
+import ComtradePanel from "../components/externalTrade/ComtradePanel";
 import { useFlow } from "../components/externalTrade/useFlow";
 import ResultCard, { ChangeBadge } from "../components/common/ResultCard";
 import { mg } from "../theme/tokens";
@@ -300,6 +301,7 @@ export default function TradeFlows() {
             </div>
           </div>
         )}
+        <ComtradePanel hs={hs} />
         <ServiceAbout number={303} />
         <ServiceFaq number={303} />
       </div>

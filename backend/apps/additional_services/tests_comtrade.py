@@ -103,3 +103,8 @@ class SyncTests(TestCase):
     def test_overview_empty_before_first_sync(self):
         r = APIClient().get("/api/additional-services/external-trade/comtrade/overview/")
         self.assertEqual((r.status_code, r.data["years"]), (200, []))
+
+    def test_trade_code_alias_maps_to_iso_country(self):
+        Country.objects.create(ctrana="250", zar0="", zar1="", zar="", name="France", name_en="France", name_cry="", name_uz="Fransiya", name_ru="", kod_kont="")
+        comtrade.save(comtrade.parse([row(partnerCode=251)], "api"))
+        self.assertEqual(ComtradeFlow.objects.get(partner_code=251).partner.name_uz, "Fransiya")

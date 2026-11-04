@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.additional_services.models.comtrade import UZ_CODE, ComtradeFlow, ComtradeSyncLog
-from apps.additional_services.models.ex_trade import TradeData
+from apps.additional_services.models.ex_trade import Product, TradeData
 
 from .flows import latest_periods
 
@@ -27,13 +27,18 @@ class ComtradeOverviewAPIView(APIView):
         years = sorted(base.values_list("year", flat=True).distinct(), reverse=True)
         sync = ComtradeSyncLog.objects.first()
         last = {"status": sync.status, "finished_at": sync.finished_at, "rows": sync.rows, "error": sync.error[:300]} if sync else None
+        codes = sorted(base.exclude(cmd_code="TOTAL").values_list("cmd_code", flat=True).distinct())[:50]
+        names = dict(Product.objects.filter(code__in=codes).values_list("code", "name_uz"))
+        options = [{"code": c, "name": (names.get(c) or "")[:80]} for c in codes]
         if not years:
-            return Response({"years": [], "year": None, "hs": "", "totals": {}, "partners": [], "compare": None, "last_sync": last})
+            return Response({"years": [], "year": None, "hs": "", "hs_options": [], "totals": {}, "partners": [], "compare": None, "last_sync": last})
         try:
             year = int(request.query_params.get("year") or years[0])
         except ValueError:
             year = years[0]
         hs = "".join(ch for ch in request.query_params.get("hs", "") if ch.isdigit())[:6]
+        if not hs and options and not base.filter(cmd_code="TOTAL").exists():
+            hs = options[0]["code"]  # jami (TOTAL) yuklanmagan: yuklangan birinchi mahsulot ko'rsatiladi
         qs = base.filter(year=year)
         qs = qs.filter(cmd_code__startswith=hs) if hs else qs.filter(cmd_code="TOTAL")
         partners = qs.exclude(partner_code=0)
@@ -48,7 +53,7 @@ class ComtradeOverviewAPIView(APIView):
             row = by.setdefault(r["partner_code"], {"code": r["partner_code"], "country": r["partner__name_uz"] or f"Kod {r['partner_code']}", "export": 0.0, "import": 0.0})
             row[FLOW_NAME[r["flow"]]] = _f(r["v"]) or 0.0
         top = sorted(by.values(), key=lambda p: -(p["export"] + p["import"]))[:TOP]
-        return Response({"years": years, "year": year, "hs": hs, "totals": totals, "partners": top,
+        return Response({"years": years, "year": year, "hs": hs, "hs_options": options, "totals": totals, "partners": top,
                          "compare": self._compare(year, hs, totals) if hs else None, "last_sync": last})
 
     @staticmethod

@@ -22,6 +22,8 @@ BASE = "https://comtradeapi.un.org"
 PREVIEW_LIMIT = 500
 KEY_HS_CHUNK = 20        # kalit bilan bir so'rovga nechta HS kodi
 BATCH = 2000
+# Comtrade ba'zi davlatlarga ISO raqamidan farqli kod beradi (savdo kodi -> ISO 3166 raqami)
+ISO_ALIAS = {251: 250, 381: 380, 579: 578, 699: 356, 757: 756, 842: 840}
 UNIQUE = ["period_type", "year", "month", "reporter_code", "partner_code", "flow", "cmd_code"]
 UPDATE = ["partner", "product", "value_usd", "net_weight_kg", "qty", "qty_unit_code", "source"]
 
@@ -94,7 +96,7 @@ def save(parsed):
     countries = {c: i for c, i in Country.objects.exclude(ctrana__isnull=True).values_list("ctrana", "id")}
     products = {c: i for c, i in Product.objects.filter(code__in={p["cmd_code"] for p in parsed if len(p["cmd_code"]) == 6})
                 .values_list("code", "id")}
-    objs = [ComtradeFlow(partner_id=countries.get(f"{p['partner_code']:03d}") if p["partner_code"] else None,
+    objs = [ComtradeFlow(partner_id=countries.get(f"{ISO_ALIAS.get(p['partner_code'], p['partner_code']):03d}") if p["partner_code"] else None,
                          product_id=products.get(p["cmd_code"]), **p) for p in parsed]
     for i in range(0, len(objs), BATCH):
         ComtradeFlow.objects.bulk_create(objs[i:i + BATCH], update_conflicts=True, unique_fields=UNIQUE, update_fields=UPDATE + ["fetched_at"])

@@ -103,3 +103,23 @@ export const downloadTradeAdviceDocx = async (params: { year?: number; hs?: stri
   a.click();
   URL.revokeObjectURL(url);
 };
+
+export interface ComtradeOverview {
+  years: number[];
+  year: number | null;
+  hs: string;
+  hs_options: { code: string; name: string }[];
+  /** AQSh dollarida (Comtrade); bojxona ma'lumoti ming $ da, `compare` da dollarga o'girilgan */
+  totals: { export?: number; import?: number };
+  partners: { code: number; country: string; export: number; import: number }[];
+  compare: null | {
+    customs_period: string;
+    note: string;
+    rows: Record<"export" | "import", { customs_usd: number | null; comtrade_usd: number | null; diff_pct: number | null }>;
+  };
+  last_sync: null | { status: string; finished_at: string | null; rows: number; error: string };
+}
+
+/** UN Comtrade+ (O'zbekiston hisoboti) va bojxona ma'lumoti bilan solishtirish. */
+export const fetchComtradeOverview = async (params: { year?: number; hs?: string }) =>
+  (await axiosT.get<ComtradeOverview>("/additional-services/external-trade/comtrade/overview/", { params })).data;
