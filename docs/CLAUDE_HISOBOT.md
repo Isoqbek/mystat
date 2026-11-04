@@ -38,3 +38,4 @@
 ## 7. Sessiyalar jurnali
 - **2026-11-03:** Variant P asosiy UI qilindi (4-bo'limga qarang). Commit qilinmagan, branch `feat/mobil-ilova-demo`.
 - **2026-11-04:** AI agent: sotib olishdan oldin yashirin namuna (`agent.sample`: ustunlar, qamrov, "•••" qatorlar; haqiqiy nom va qiymat yo'q), sotib olgandan keyin `/credits/agent/purchases/<id>/preview/` (jadval sahifalab, yillar diagrammasi). Frontend: `DataPreview.tsx`. `docker-compose.yml` backend'ga `host.docker.internal`. Serverda (172.30.30.30:8085) hali eski image: qayta build kerak (`docs/SERVERGA_JOYLASH.md`).
+- **2026-11-04 (2):** UN Comtrade+ importi: `ComtradeFlow`/`ComtradeSyncLog` (migratsiya 0071), `sync_comtrade` buyrug'i, `comtrade_sync_task` + beat (kalit bo'lsa), `/external-trade/comtrade/overview/`. Batafsil: `docs/COMTRADE.md`. Kalit (`COMTRADE_API_KEY`) hali yo'q: faqat ochiq API bilan shakar (HS 1701) 2019-2024 yuklandi.
