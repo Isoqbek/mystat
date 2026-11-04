@@ -21,7 +21,6 @@ from django.db import transaction
 from django.db.models import Q, Sum
 from django.utils import timezone
 
-from apps.additional_services.api_endpoints.ExternalTradeAPI.advisor import fmt as money
 from apps.additional_services.api_endpoints.ExternalTradeAPI.flows import latest_periods, period_label
 from apps.additional_services.api_endpoints.ExternalTradeAPI.trade_hub import data_quality
 from apps.additional_services.models.ex_trade import Product, TradeData
@@ -217,17 +216,25 @@ def fingerprint(spec):
 def _rows(spec):
     kind = spec["kind"]
     if kind == "yearly":
-        return len(spec["periods"]) * len(spec["flows"])
+        return _qs(spec).values("year_id", "trade_type").distinct().count()
     field = {"countries": "country_id", "regions": "region_id", "products": "product_id"}[kind]
     return _qs(spec).values("year_id", "trade_type", field).distinct().count()
 
 
-def _teaser(spec):
-    year = max(int(y) for y in spec["periods"])
-    qs = _qs({**spec, "periods": {str(year): spec["periods"][str(year)]}})
-    by = {r["trade_type"]: r["v"] for r in qs.values("trade_type").annotate(v=Sum("value"))}
-    parts = [f"{FLOW_NAME[f].lower()} {money(by[f])}" for f in spec["flows"] if by.get(f) is not None]
-    return f"{year}-yil {period_label(spec['periods'][str(year)])}: " + " · ".join(parts) if parts else ""
+ENTITY = {"countries": ("country_id", "davlat"), "regions": ("region_id", "viloyat"), "products": ("product_id", "mahsulot")}
+STRUCTURAL = {"Yil", "Davr", "Oqim"}  # namunada ochiq ko'rsatiladigan ustunlar; qolgani (nom, qiymat, miqdor) yashirin
+
+
+def sample(spec):
+    """Sotib olishdan OLDIN ko'rsatiladigan namuna: ustunlar, qamrov va yashirilgan qatorlar. Haqiqiy qiymat, davlat,
+    viloyat yoki mahsulot nomi chiqmaydi (faqat yil, davr va oqim kabi tuzilma)."""
+    header, rows = dataset(spec, 0, 3)
+    masked = [[c if h in STRUCTURAL else "•••" for h, c in zip(header, row)] for row in rows]
+    cover = [f"{len(spec['periods'])} yil", " va ".join(FLOW_NAME[f].lower() for f in spec["flows"])]
+    if spec["kind"] in ENTITY:
+        field, label = ENTITY[spec["kind"]]
+        cover.append(f"{_qs(spec).values(field).distinct().count()} ta {label}")
+    return {"columns": header, "rows": masked, "coverage": " · ".join(cover)}
 
 
 def build_items(hs, flows, years, wallet):
@@ -250,7 +257,7 @@ def build_items(hs, flows, years, wallet):
         items.append({"id": kind, "kind": kind, "title": title, "description": desc, "rows": rows,
                       "price": float(item_price(kind, rows)), "owned": bought is not None,
                       "purchase_id": bought.id if bought else None, "spec": spec,
-                      "teaser": _teaser(spec) if kind == "yearly" else ""})
+                      "sample": None if bought else sample(spec)})
     return items
 
 
@@ -351,31 +358,47 @@ def history(user):
     return [serialize_purchase(p) for p in DataPurchase.objects.filter(wallet=wallet)[:200]]
 
 
+def dataset(spec, offset=0, limit=MAX_DOWNLOAD_ROWS):
+    """To'plam jadvali: (sarlavhalar, qatorlar[offset:offset+limit]). Yuklash, namuna va ko'rish uchun yagona manba."""
+    qs = _qs(spec)
+    agg = {"v": Sum("value"), "q": Sum("quantity")}
+    kind = spec["kind"]
+    num = lambda r: [float(r["v"] or 0), float(r["q"] or 0)]  # noqa: E731
+    if kind == "yearly":
+        header = ["Yil", "Davr", "Oqim", "Qiymat (ming AQSh $)", "Miqdor"]
+        rows = qs.values("year_id", "trade_type").annotate(**agg).order_by("year_id", "trade_type")
+        make = lambda r: [r["year_id"], period_label(spec["periods"][str(r["year_id"])]), FLOW_NAME[r["trade_type"]], *num(r)]  # noqa: E731
+    elif kind == "countries":
+        header = ["Yil", "Oqim", "Davlat", "ISO kod", "Qiymat (ming AQSh $)", "Miqdor"]
+        rows = qs.values("year_id", "trade_type", "country__name_uz", "country__ctrana").annotate(**agg).order_by("year_id", "trade_type", "-v")
+        make = lambda r: [r["year_id"], FLOW_NAME[r["trade_type"]], r["country__name_uz"], r["country__ctrana"], *num(r)]  # noqa: E731
+    elif kind == "regions":
+        header = ["Yil", "Oqim", "Viloyat", "SOATO", "Qiymat (ming AQSh $)", "Miqdor"]
+        rows = qs.values("year_id", "trade_type", "region__name_uz", "region__soato").annotate(**agg).order_by("year_id", "trade_type", "-v")
+        make = lambda r: [r["year_id"], FLOW_NAME[r["trade_type"]], r["region__name_uz"], r["region__soato"], *num(r)]  # noqa: E731
+    else:
+        header = ["Yil", "Oqim", "HS kod", "Mahsulot", "Qiymat (ming AQSh $)", "Miqdor"]
+        rows = qs.values("year_id", "trade_type", "product__code", "product__name_uz").annotate(**agg).order_by("year_id", "trade_type", "-v")
+        make = lambda r: [r["year_id"], FLOW_NAME[r["trade_type"]], r["product__code"], r["product__name_uz"], *num(r)]  # noqa: E731
+    return header, [make(r) for r in rows[offset:offset + limit]]
+
+
+def preview(purchase, offset=0, limit=25):
+    """Sotib olingan to'plamni sahifada ko'rsatish: jadval (sahifalab) va yillar bo'yicha qiymat diagrammasi."""
+    spec = purchase.spec
+    limit = max(1, min(limit, 100))
+    header, rows = dataset(spec, max(0, offset), limit)
+    chart = {}
+    for r in _qs(spec).values("year_id", "trade_type").annotate(v=Sum("value")).order_by("year_id"):
+        chart.setdefault(r["year_id"], {"year": r["year_id"]})[FLOW_NAME[r["trade_type"]]] = float(r["v"] or 0)
+    return {"id": purchase.id, "title": purchase.title, "columns": header, "rows": rows, "total": _rows(spec),
+            "offset": max(0, offset), "chart": list(chart.values()), "unit": "ming AQSh $"}
+
+
 def build_file(purchase, fmt="xlsx"):
     """Sotib olingan to'plamni saqlangan davr bo'yicha qayta yaratadi (qayta to'lovsiz). -> (bayt, content_type, fayl nomi)."""
     spec = purchase.spec
-    qs = _qs(spec)
-    kind = spec["kind"]
-    if kind == "yearly":
-        header = ["Yil", "Davr", "Oqim", "Qiymat (ming AQSh $)", "Miqdor"]
-        data = [[r["year_id"], period_label(spec["periods"][str(r["year_id"])]), FLOW_NAME[r["trade_type"]],
-                 float(r["v"] or 0), float(r["q"] or 0)]
-                for r in qs.values("year_id", "trade_type").annotate(v=Sum("value"), q=Sum("quantity")).order_by("year_id", "trade_type")]
-    elif kind == "countries":
-        header = ["Yil", "Oqim", "Davlat", "ISO kod", "Qiymat (ming AQSh $)", "Miqdor"]
-        data = [[r["year_id"], FLOW_NAME[r["trade_type"]], r["country__name_uz"], r["country__ctrana"], float(r["v"] or 0), float(r["q"] or 0)]
-                for r in qs.values("year_id", "trade_type", "country__name_uz", "country__ctrana")
-                .annotate(v=Sum("value"), q=Sum("quantity")).order_by("year_id", "trade_type", "-v")[:MAX_DOWNLOAD_ROWS]]
-    elif kind == "regions":
-        header = ["Yil", "Oqim", "Viloyat", "SOATO", "Qiymat (ming AQSh $)", "Miqdor"]
-        data = [[r["year_id"], FLOW_NAME[r["trade_type"]], r["region__name_uz"], r["region__soato"], float(r["v"] or 0), float(r["q"] or 0)]
-                for r in qs.values("year_id", "trade_type", "region__name_uz", "region__soato")
-                .annotate(v=Sum("value"), q=Sum("quantity")).order_by("year_id", "trade_type", "-v")[:MAX_DOWNLOAD_ROWS]]
-    else:
-        header = ["Yil", "Oqim", "HS kod", "Mahsulot", "Qiymat (ming AQSh $)", "Miqdor"]
-        data = [[r["year_id"], FLOW_NAME[r["trade_type"]], r["product__code"], r["product__name_uz"], float(r["v"] or 0), float(r["q"] or 0)]
-                for r in qs.values("year_id", "trade_type", "product__code", "product__name_uz")
-                .annotate(v=Sum("value"), q=Sum("quantity")).order_by("year_id", "trade_type", "-v")[:MAX_DOWNLOAD_ROWS]]
+    header, data = dataset(spec)
     note = f"Manba: my.stat.uz, Milliy statistika qo'mitasi, bojxona ma'lumotlari. HS {spec['hs']}*. Sotib olingan: {purchase.created_at:%d.%m.%Y}."
     name = f"savdo-{purchase.kind}-hs{spec['hs']}-{purchase.id}"
     if fmt == "xlsx":

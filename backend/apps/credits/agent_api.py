@@ -80,6 +80,21 @@ class AgentHistoryView(APIView):
         return Response({"results": agent.history(request.user)})
 
 
+class AgentPreviewView(APIView):
+    """GET purchases/<id>/preview/?offset=0&limit=25 — sotib olingan to'plamni sahifada ko'rish (jadval va diagramma)."""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        purchase = agent.purchase_of(request.user, pk)
+        if purchase is None:
+            return Response({"detail": "Topilmadi"}, status=404)
+        try:
+            offset, limit = int(request.query_params.get("offset", 0)), int(request.query_params.get("limit", 25))
+        except ValueError:
+            return Response({"detail": "offset/limit son bo'lishi kerak"}, status=400)
+        return Response(agent.preview(purchase, offset, limit))
+
+
 class AgentDownloadView(APIView):
     """GET purchases/<id>/download/?file=xlsx|csv — sotib olingan to'plam, qayta to'lovsiz."""
     permission_classes = [IsAuthenticated]

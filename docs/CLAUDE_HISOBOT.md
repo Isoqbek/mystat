@@ -37,3 +37,4 @@
 
 ## 7. Sessiyalar jurnali
 - **2026-11-03:** Variant P asosiy UI qilindi (4-bo'limga qarang). Commit qilinmagan, branch `feat/mobil-ilova-demo`.
+- **2026-11-04:** AI agent: sotib olishdan oldin yashirin namuna (`agent.sample`: ustunlar, qamrov, "•••" qatorlar; haqiqiy nom va qiymat yo'q), sotib olgandan keyin `/credits/agent/purchases/<id>/preview/` (jadval sahifalab, yillar diagrammasi). Frontend: `DataPreview.tsx`. `docker-compose.yml` backend'ga `host.docker.internal`. Serverda (172.30.30.30:8085) hali eski image: qayta build kerak (`docs/SERVERGA_JOYLASH.md`).

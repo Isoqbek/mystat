@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Bot, Check, Download, History, Loader2, ShoppingCart, X } from "lucide-react";
+import { Bot, Check, ChevronDown, Download, Eye, History, Loader2, ShoppingCart, X } from "lucide-react";
 import {
   agentAccept, agentDecline, agentDownload, agentHistory, agentQuote,
   type AgentItem, type AgentPurchase, type AgentQuote,
@@ -9,6 +9,7 @@ import {
 import { formatSom, notifyCreditsChanged } from "../../api/credits";
 import { useAuth } from "../../contexts/AuthContext";
 import { loginUrl } from "../../utils/loginRedirect";
+import DataPreview, { SamplePeek } from "./DataPreview";
 
 /** Savdo ma'lumoti so'rovi: "shakar eksport", "1701 import 2024" ... Boshqa so'rovlarda agent chaqirilmaydi. */
 export const TRADE_INTENT = /eksport|import|export|экспорт|импорт|\b\d{4,6}\b|tashqi savdo/i;
@@ -31,6 +32,7 @@ export default function DataAgentPanel({ query }: { query: string }) {
   const [dismissed, setDismissed] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState<AgentPurchase[] | null>(null);
+  const [open, setOpen] = useState<Set<string>>(new Set());
 
   useEffect(() => setHs(""), [query]);
 
@@ -77,6 +79,7 @@ export default function DataAgentPanel({ query }: { query: string }) {
   const balance = quote.balance ?? 0;
   const short = total - balance;
 
+  const toggleOpen = (id: string) => setOpen((p) => { const n = new Set(p); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const toggle = (id: string) => setPicked((p) => { const n = new Set(p); if (n.has(id)) n.delete(id); else n.add(id); return n; });
 
   const accept = async () => {
@@ -155,7 +158,7 @@ export default function DataAgentPanel({ query }: { query: string }) {
                     <span className="min-w-0 flex-1">
                       <span className="block text-[15px] font-semibold">{i.title} <span className="font-normal text-mg-muted">· {i.rows} qator</span></span>
                       <span className="block text-[13px] text-mg-muted">{i.description}</span>
-                      {i.teaser && <span className="block text-[13px]">{i.teaser}</span>}
+                      {i.sample && <span className="mt-0.5 block text-[13px] text-mg-muted">{i.sample.coverage}</span>}
                     </span>
                     {i.owned && p ? (
                       <span className="flex items-center gap-2">
@@ -166,6 +169,15 @@ export default function DataAgentPanel({ query }: { query: string }) {
                     ) : (
                       <span className="mono text-[15px] font-bold">{money(i.price)}</span>
                     )}
+                    {i.owned && p && (
+                      <button type="button" onClick={() => toggleOpen(i.id)} aria-expanded={open.has(i.id)}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[var(--btn)] px-3 py-1 text-xs font-bold text-white hover:brightness-110">
+                        <Eye className="h-3.5 w-3.5" aria-hidden="true" />Ma'lumotni ko'rish
+                        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open.has(i.id) ? "rotate-180" : ""}`} aria-hidden="true" />
+                      </button>
+                    )}
+                    {i.owned && p && open.has(i.id) && <DataPreview purchaseId={p.id} />}
+                    {i.sample && <SamplePeek sample={i.sample} />}
                   </li>
                 );
               })}

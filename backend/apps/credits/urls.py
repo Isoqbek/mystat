@@ -12,5 +12,6 @@ urlpatterns = [
     path("agent/accept/", agent_api.AgentAcceptView.as_view(), name="agent-accept"),
     path("agent/decline/", agent_api.AgentDeclineView.as_view(), name="agent-decline"),
     path("agent/history/", agent_api.AgentHistoryView.as_view(), name="agent-history"),
+    path("agent/purchases/<int:pk>/preview/", agent_api.AgentPreviewView.as_view(), name="agent-preview"),
     path("agent/purchases/<int:pk>/download/", agent_api.AgentDownloadView.as_view(), name="agent-download"),
 ]

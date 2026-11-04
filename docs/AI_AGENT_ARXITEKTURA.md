@@ -63,6 +63,10 @@ Standart qiymatlar `agent.POLICY`; admin'da `CreditPrice` jadvalidagi kodlar bil
 - Fayl saqlangan davr bo'yicha qayta yaratiladi (nusxa saqlanmaydi): davr qulflangani uchun mazmun o'zgarmaydi. Yangi oy ma'lumoti kelsa, fingerprint o'zgaradi va u yangi mahsulot bo'ladi.
 - Xodimlar bitta korxona hamyonini ishlatsa, tarix ham umumiy.
 
+### Namuna va ko'rish
+- **Sotib olishdan oldin** har to'plamda `sample` bor: ustunlar, qamrov ("6 yil · eksport · 12 ta davlat") va 3 ta yashirilgan qator. Faqat yil, davr, oqim ochiq; davlat/viloyat/mahsulot nomi va qiymatlar serverda "•••" ga almashtiriladi, shuning uchun brauzerda ochib bo'lmaydi.
+- **Sotib olgandan keyin** `GET /api/credits/agent/purchases/<id>/preview/?offset=&limit=` (limit ≤ 100): jadval sahifalab va yillar bo'yicha diagramma. To'liq fayl XLSX/CSV bilan yuklanadi. Jadval manbasi bitta: `agent.dataset()` (namuna, ko'rish va yuklash uchun).
+
 ## 5. Xavfsizlik va to'g'rilik
 
 - **Narxga mijoz ta'sir qilmaydi:** qabul paytida narx `DataOffer` ichida saqlangan qiymatdan olinadi.

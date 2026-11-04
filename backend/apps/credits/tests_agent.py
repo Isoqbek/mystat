@@ -130,3 +130,36 @@ class AcceptTests(TestCase):
         rows = agent.history(self.user)
         self.assertEqual(len(rows), 3)
         self.assertEqual({r["kind"] for r in rows}, {"yearly", "countries", "regions"})
+
+
+class SampleTests(SimpleTestCase):
+    HEADER = ["Yil", "Oqim", "Davlat", "ISO kod", "Qiymat (ming AQSh $)", "Miqdor"]
+    ROWS = [[2024, "Eksport", "Qozog'iston", "KZ", 1234.5, 99.0], [2024, "Eksport", "Rossiya", "RU", 800.0, 40.0]]
+
+    def test_sample_hides_names_and_values(self):
+        qs = mock.MagicMock()
+        qs.values.return_value.distinct.return_value.count.return_value = 12
+        with mock.patch("apps.credits.agent.dataset", return_value=(self.HEADER, self.ROWS)), \
+                mock.patch("apps.credits.agent._qs", return_value=qs):
+            s = agent.sample(SPEC)
+        self.assertEqual(s["columns"], self.HEADER)
+        self.assertEqual(s["rows"][0], [2024, "Eksport", "•••", "•••", "•••", "•••"])
+        flat = str(s)
+        for secret in ("Qozog'iston", "Rossiya", "1234.5", "800.0", "KZ"):
+            self.assertNotIn(secret, flat)
+        self.assertIn("12 ta davlat", s["coverage"])
+        self.assertIn("eksport", s["coverage"])
+
+    def test_preview_clamps_limit_and_returns_chart(self):
+        purchase = mock.Mock(spec_set=["spec", "id", "title", "rows"], spec=SPEC, id=7, title="Davlatlar", rows=2)
+        purchase.spec = SPEC
+        qs = mock.MagicMock()
+        qs.values.return_value.annotate.return_value.order_by.return_value = [
+            {"year_id": 2023, "trade_type": 1, "v": 5}, {"year_id": 2023, "trade_type": 2, "v": 3}, {"year_id": 2024, "trade_type": 1, "v": 9}]
+        with mock.patch("apps.credits.agent.dataset", return_value=(self.HEADER, self.ROWS)) as ds, \
+                mock.patch("apps.credits.agent._qs", return_value=qs), mock.patch("apps.credits.agent._rows", return_value=2):
+            out = agent.preview(purchase, offset=-5, limit=9999)
+        ds.assert_called_once_with(SPEC, 0, 100)
+        self.assertEqual(out["rows"], self.ROWS)
+        self.assertEqual(out["chart"], [{"year": 2023, "Eksport": 5.0, "Import": 3.0}, {"year": 2024, "Eksport": 9.0}])
+        self.assertEqual(out["total"], 2)

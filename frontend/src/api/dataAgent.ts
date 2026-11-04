@@ -1,6 +1,23 @@
 import axiosT from "./baseUrl";
 
 /** AI agent bilan ma'lumot savdosi: topish, narxlash, qabul/rad, tarix va yuklash. Narxni server hisoblaydi. */
+export interface AgentSample {
+  columns: string[];
+  rows: (string | number)[][];
+  coverage: string;
+}
+
+export interface AgentPreview {
+  id: number;
+  title: string;
+  columns: string[];
+  rows: (string | number | null)[][];
+  total: number;
+  offset: number;
+  chart: { year: number; Eksport?: number; Import?: number }[];
+  unit: string;
+}
+
 export interface AgentItem {
   id: string;
   kind: string;
@@ -11,7 +28,8 @@ export interface AgentItem {
   price: number;
   owned: boolean;
   purchase_id: number | null;
-  teaser: string;
+  /** Sotib olishdan oldin: ustunlar, qamrov va yashirilgan qatorlar (haqiqiy qiymat yo'q). Sotib olingan bo'lsa null */
+  sample: AgentSample | null;
 }
 
 export interface AgentQuestionOption {
@@ -66,6 +84,9 @@ export const agentAccept = async (offerId: number, items: string[]) =>
 export const agentDecline = async (offerId: number) => (await axiosT.post("/credits/agent/decline/", { offer_id: offerId })).data;
 
 export const agentHistory = async () => (await axiosT.get<{ results: AgentPurchase[] }>("/credits/agent/history/")).data.results;
+
+export const agentPreview = async (id: number, offset = 0, limit = 25) =>
+  (await axiosT.get<AgentPreview>(`/credits/agent/purchases/${id}/preview/`, { params: { offset, limit } })).data;
 
 /** Sotib olingan to'plamni yuklab oladi (qayta to'lovsiz). */
 export const agentDownload = async (purchase: Pick<AgentPurchase, "id" | "kind" | "hs">, file: "xlsx" | "csv") => {
