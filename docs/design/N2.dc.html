@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>Variant_N2</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F6F8}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+.sk{transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease}
+.sk:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(16,40,60,0.10);border-color:var(--p200, #A6E1EE) !important}
+.sk:hover .sgo{opacity:1;transform:translateX(0)}
+.sgo{opacity:.55;transform:translateX(-3px);transition:all .15s ease}
+.srow{transition:background .12s ease}
+.srow:hover{background:var(--p50, #E8F8FB) !important}
+.sin::placeholder{color:#6B7885}
+.sin:focus{outline:none}
+.sbox:focus-within{box-shadow:0 0 0 4px rgba(255,255,255,0.28)}
+.spill{transition:background .12s ease}
+.spill:hover{background:var(--p50, #E8F8FB) !important}
+.sscroll::-webkit-scrollbar{height:0;width:6px}
+.sscroll::-webkit-scrollbar-thumb{background:#C9D4DB;border-radius:6px}
+.c2 {display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media (prefers-reduced-motion: reduce){.sk,.sgo,.srow{transition:none}}
+@keyframes nin{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.nin{animation:nin .22s ease}
+.nstrip{transition:background .12s ease}
+.nstrip:hover{background:var(--p100, #D4F1F7) !important}
+.nvert{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap}
+@media (prefers-reduced-motion: reduce){.nin{animation:none}}
+@keyframes jspin{to{transform:rotate(360deg)}}
+.jspin{animation:jspin .9s linear infinite}
+@keyframes jfill{from{width:0}to{width:100%}}
+.jfill{animation:jfill 1.6s ease forwards}
+</style>
+</helmet>
+
+<div style="{{themeVars}} position: relative; font-family: 'Onest', system-ui, sans-serif; color: #1B2530; background: #F3F6F8; font-size: 15px; line-height: 1.5">
+<sc-if value="{{palUi.open}}" hint-placeholder-val="{{true}}">
+<div style="background: #1B2530; color: #FFFFFF">
+<div style="max-width: 1320px; margin: 0 auto; padding: 12px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px">
+<span style="display: flex; flex-direction: column; line-height: 1.3"><span style="font-size: 13px; font-weight: 600">Rang palitrasi</span><span style="font-size: 11px; color: #C3CCD4">Ko'rib chiqish paneli, saytga kirmaydi</span></span>
+<div role="radiogroup" aria-label="Rang palitrasi" style="flex: 1 1 600px; min-width: 0; display: flex; flex-wrap: wrap; gap: 8px 20px">
+<sc-for list="{{palGroups}}" as="g" hint-placeholder-count="5">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px">
+<span style="font-size: 11px; font-weight: 500; letter-spacing: 0.04em; color: #C3CCD4; min-width: 56px">{{g.label}}</span>
+<sc-for list="{{g.items}}" as="pb" hint-placeholder-count="2">
+<button type="button" role="radio" aria-checked="{{pb.on}}" onClick="{{pb.pick}}" style="{{pb.style}}">
+<span aria-hidden="true" style="display: flex; gap: 2px"><span style="{{pb.s1}}"></span><span style="{{pb.s2}}"></span><span style="{{pb.s3}}"></span><span style="{{pb.s4}}"></span></span>
+<span>{{pb.name}}</span>
+</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<button type="button" onClick="{{palUi.hide}}" aria-label="Palitra panelini yopish" style="height: 34px; padding: 0 14px; display: flex; align-items: center; gap: 6px; margin-left: auto; border: 1px solid #4A5763; border-radius: 999px; background: transparent; color: #FFFFFF; font: inherit; font-size: 13px; cursor: pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>Yopish</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{palUi.closed}}" hint-placeholder-val="{{false}}">
+<button type="button" onClick="{{palUi.show}}" aria-label="Rang palitrasini o'zgartirish" title="Rang palitrasini o'zgartirish" style="position: absolute; top: 12px; right: 12px; z-index: 20; height: 38px; padding: 0 14px 0 10px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 999px; background: #1B2530; color: #FFFFFF; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; box-shadow: 0 6px 18px -6px rgba(27,37,48,0.45)">
+<span aria-hidden="true" style="display: flex; gap: 2px"><span style="{{palUi.s1}}"></span><span style="{{palUi.s2}}"></span><span style="{{palUi.s3}}"></span><span style="{{palUi.s4}}"></span></span>
+<span>{{palUi.name}}</span>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+</sc-if>
+
+<header style="background: #FFFFFF; border-bottom: 1px solid var(--n200, #E6EEF2)">
+<div style="padding: 12px 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px">
+<a href="#" style="display: flex; align-items: center; gap: 12px; color: #1B2530; text-decoration: none; margin-right: 8px">
+<span style="width: 40px; height: 40px; border-radius: 12px; border: 1px dashed #97A3AE; display: flex; align-items: center; justify-content: center; font-size: 8px; color: #5E6C78">[LOGO]</span>
+<span style="display: flex; flex-direction: column; line-height: 1.15"><span style="font-size: 19px; font-weight: 800; letter-spacing: -0.03em">my.stat.uz</span><span style="font-size: 11px; color: #4A5763">Rasmiy statistika portali</span></span>
+</a>
+<nav aria-label="Asosiy menyu" style="display: flex; flex-wrap: wrap; gap: 2px; font-size: 14px; font-weight: 600; margin-right: auto">
+<a href="#" style="padding: 8px 12px; border-radius: 999px; background: var(--p50, #E8F8FB); color: var(--p800, #004E6B)">Xizmatlar</a>
+<a href="#" style="padding: 8px 12px; color: #1B2530">Ko'rsatkichlar</a>
+<a href="#" style="padding: 8px 12px; color: #1B2530">Hududlar</a>
+<a href="#" style="padding: 8px 12px; color: #1B2530">Hisobotlar</a>
+<a href="#" style="padding: 8px 12px; color: #1B2530">Nashrlar</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span style="display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; background: var(--n100, #F2F7F9); border-radius: 999px; font-size: 13px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #1EB53A"></span><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">{{clock}}</span></span>
+<span style="display: flex; padding: 3px; border-radius: 999px; background: var(--n100, #F2F7F9); font-size: 13px; font-weight: 700"><span style="padding: 6px 10px; border-radius: 999px; background: #FFFFFF; color: var(--p800, #004E6B); box-shadow: 0 1px 3px rgba(27,37,48,0.12)">O'z</span><span style="padding: 6px 10px; color: #4A5763">Ўз</span><span style="padding: 6px 10px; color: #4A5763">Ру</span><span style="padding: 6px 10px; color: #4A5763">En</span></span>
+<a href="#" style="height: 38px; padding: 0 16px; display: flex; align-items: center; border-radius: 999px; background: var(--btn, #0077A0); color: #FFFFFF; font-size: 14px; font-weight: 700; text-decoration: none">OneID orqali kirish</a>
+</div>
+</div>
+</header>
+
+<section aria-labelledby="f-h" style="background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0) 60%), linear-gradient(160deg, var(--p800, #004E6B) 0%, var(--btn, #0077A0) 58%, var(--accent, #0099B5) 100%); color: #FFFFFF; padding: 22px clamp(16px, 3vw, 40px)">
+<div style="max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 28px">
+<div><h1 id="f-h" style="margin: 0; font-size: 28px; line-height: 1.15; font-weight: 800; letter-spacing: -0.03em">Xizmatlar</h1><p style="margin: 4px 0 0; font-size: 15px; color: rgba(255,255,255,0.88)">{{total}} ta xizmat, 14 ta sohada</p></div>
+<form onSubmit="{{srch.submit}}" class="sbox" style="flex: 1 1 340px; max-width: 540px; display: flex; align-items: center; gap: 8px; padding: 5px 8px 5px 16px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 18px 36px -22px rgba(0,0,0,0.5); transition: box-shadow .15s ease">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--btn, #0077A0)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<label for="f-q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Xizmatni izlash</label>
+<input id="f-q" class="sin" type="search" value="{{srch.q}}" onChange="{{srch.type}}" placeholder="Xizmatni izlash" style="flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; color: #1B2530; font: inherit; font-size: 16px">
+<sc-if value="{{srch.has}}" hint-placeholder-val="{{false}}"><button type="button" onClick="{{srch.clear}}" style="height: 34px; padding: 0 12px; border: 0; border-radius: 9px; background: var(--n100, #F2F7F9); color: #1B2530; font-size: 14px; cursor: pointer">Tozalash</button></sc-if>
+</form>
+</div>
+</section>
+<main style="max-width: 1280px; margin: 0 auto; padding: 22px clamp(16px, 3vw, 40px) 56px; display: flex; flex-direction: column; gap: 14px">
+<sc-if value="{{hasRec}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span style="font-size: 13px; color: #4A5763">Tezkor o'tish:</span>
+<sc-for list="{{recChips}}" as="r" hint-placeholder-count="3"><button type="button" class="spill" onClick="{{r.pick}}" style="height: 34px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--n200, #E6EEF2); background: #FFFFFF; font-size: 13.5px; cursor: pointer; color: #1B2530"><b style="color: var(--btn, #0077A0); font-weight: 600">{{r.cap}}:</b> {{r.t}}</button></sc-for></div>
+</sc-if>
+<div style="display: flex; align-items: stretch; border-radius: 22px; background: #FFFFFF; border: 1px solid var(--n200, #E6EEF2); box-shadow: 0 24px 48px -36px rgba(16,40,60,0.5); overflow: hidden; min-height: 660px">
+<sc-if value="{{aStrip}}" hint-placeholder-val="{{false}}"><button type="button" class="nstrip" onClick="{{toRoot}}" aria-label="Sohalar ro'yxatiga qaytish" style="flex: none; width: 66px; border: 0; border-right: 1px solid var(--n200, #E6EEF2); background: var(--p50, #E8F8FB); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 16px 0; color: var(--p800, #004E6B)"><span style="font-size: 22px; line-height: 1">‹</span><span class="nvert" style="font-size: 15px; font-weight: 700">{{aText}}</span></button></sc-if>
+<sc-if value="{{bStrip}}" hint-placeholder-val="{{false}}"><button type="button" class="nstrip" onClick="{{toCat}}" aria-label="Xizmatlar ro'yxatiga qaytish" style="flex: none; width: 66px; border: 0; border-right: 1px solid var(--n200, #E6EEF2); background: var(--p50, #E8F8FB); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 16px 0; color: var(--p800, #004E6B)"><span style="font-size: 22px; line-height: 1">‹</span><span class="nvert" style="font-size: 15px; font-weight: 700">{{bText}}</span></button></sc-if>
+<sc-if value="{{fl.open}}" hint-placeholder-val="{{false}}"><button type="button" class="nstrip" onClick="{{fl.close}}" aria-label="Xizmat tafsilotiga qaytish" style="flex: none; width: 66px; border: 0; border-right: 1px solid var(--n200, #E6EEF2); background: var(--p100, #D4F1F7); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 16px 0; color: var(--p800, #004E6B)"><span style="font-size: 22px; line-height: 1">‹</span><span class="nvert" style="font-size: 15px; font-weight: 700">{{fl.svcName}}</span></button></sc-if>
+<div style="flex: 1; min-width: 0; display: {{colDisp}}; flex-direction: column">
+<sc-if value="{{showSearch}}" hint-placeholder-val="{{false}}">
+<div class="nin" style="display: flex; flex-direction: column">
+<div style="padding: 18px 18px 8px"><h2 style="margin: 0; font-size: 20px; font-weight: 800">Qidiruv natijalari</h2><span style="font-size: 14px; color: #4A5763">"{{srch.q}}" bo'yicha {{hitN}} ta xizmat</span></div>
+<sc-for list="{{hitRows}}" as="c" hint-placeholder-count="5"><div class="srow" style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--n100, #F2F7F9); background: #FFFFFF">
+<span style="flex: none; width: 42px; height: 42px; border-radius: 12px; background: var(--p50, #E8F8FB); color: var(--p800, #004E6B); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{c.icon}}"></path></svg></span>
+<button type="button" onClick="{{c.pick}}" style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; align-items: flex-start; border: 0; background: transparent; padding: 0; cursor: pointer; text-align: left; color: #1B2530"><b style="font-size: 15px; line-height: 1.3">{{c.t}}</b><span class="c2" style="font-size: 13.5px; color: #4A5763">{{c.d}}</span></button>
+<span style="{{c.timeStyle}}">{{c.time}}</span>
+<button type="button" aria-pressed="{{c.favOn}}" aria-label="{{c.favLabel}}" onClick="{{c.toggle}}" style="{{c.favBtn}}"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" style="{{c.favSvg}}"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"></path></svg></button>
+<button type="button" onClick="{{c.pick}}" aria-label="Ochish" style="flex: none; width: 34px; height: 34px; border: 0; border-radius: 10px; background: transparent; font-size: 22px; color: #6B7885; cursor: pointer">›</button>
+</div></sc-for>
+<sc-if value="{{hitNone}}" hint-placeholder-val="{{false}}"><div style="padding: 40px 16px; text-align: center; color: #4A5763">Hech narsa topilmadi.</div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{showL0}}" hint-placeholder-val="{{true}}">
+<div class="nin" style="padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div><h2 style="margin: 0; font-size: 22px; font-weight: 800">Soha tanlang</h2><span style="font-size: 14px; color: #4A5763">Tanlaganingizdan keyin bu ro'yxat chapga siqiladi. Qaytish uchun siqilgan ustunni bosing.</span></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px">
+<sc-for list="{{cats}}" as="k" hint-placeholder-count="14"><button type="button" class="sk" onClick="{{k.pick}}" style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 16px; background: #FFFFFF; border: 1px solid var(--n200, #E6EEF2); cursor: pointer; text-align: left; color: #1B2530; min-height: 78px"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><b style="font-size: 16px; line-height: 1.3">{{k.t}}</b><span style="font-size: 13px; color: var(--btn, #0077A0); font-weight: 600">{{k.n}} ta xizmat</span></span><span class="sgo" aria-hidden="true" style="flex: none; font-size: 24px; color: var(--btn, #0077A0)">›</span></button></sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{showL1}}" hint-placeholder-val="{{false}}">
+<div class="nin" style="display: flex; flex-direction: column">
+<div style="padding: 18px 18px 10px; display: flex; align-items: baseline; gap: 10px"><h2 style="margin: 0; font-size: 22px; font-weight: 800">{{catName}}</h2><span style="font-size: 14px; color: #4A5763">{{svcRows.length}} ta xizmat</span></div>
+<div class="sscroll" style="display: flex; gap: 8px; overflow-x: auto; padding: 0 18px 14px">
+<sc-for list="{{sibs}}" as="p" hint-placeholder-count="8"><button type="button" onClick="{{p.pick}}" style="{{p.st}}">{{p.t}}</button></sc-for>
+</div>
+<div style="border-top: 1px solid var(--n100, #F2F7F9)"><sc-for list="{{svcRows}}" as="c" hint-placeholder-count="5"><div class="srow" style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-bottom: 1px solid var(--n100, #F2F7F9); background: #FFFFFF">
+<span style="flex: none; width: 42px; height: 42px; border-radius: 12px; background: var(--p50, #E8F8FB); color: var(--p800, #004E6B); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{c.icon}}"></path></svg></span>
+<button type="button" onClick="{{c.pick}}" style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; align-items: flex-start; border: 0; background: transparent; padding: 0; cursor: pointer; text-align: left; color: #1B2530"><b style="font-size: 15px; line-height: 1.3">{{c.t}}</b><span class="c2" style="font-size: 13.5px; color: #4A5763">{{c.d}}</span></button>
+<span style="{{c.timeStyle}}">{{c.time}}</span>
+<button type="button" aria-pressed="{{c.favOn}}" aria-label="{{c.favLabel}}" onClick="{{c.toggle}}" style="{{c.favBtn}}"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" style="{{c.favSvg}}"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"></path></svg></button>
+<button type="button" onClick="{{c.pick}}" aria-label="Ochish" style="flex: none; width: 34px; height: 34px; border: 0; border-radius: 10px; background: transparent; font-size: 22px; color: #6B7885; cursor: pointer">›</button>
+</div></sc-for></div>
+</div>
+</sc-if>
+<sc-if value="{{showL2}}" hint-placeholder-val="{{false}}">
+<div class="nin" style="padding: 0">
+<div style="display: flex; flex-direction: column">
+<section style="background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0) 60%), linear-gradient(160deg, var(--p800, #004E6B) 0%, var(--btn, #0077A0) 58%, var(--accent, #0099B5) 100%); color: #FFFFFF; padding: 26px 28px 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<span style="flex: none; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; color: #FFFFFF"><svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{det.icon}}"></path></svg></span>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: rgba(255,255,255,0.8)">{{det.catName}}</span><h2 style="margin: 0; font-size: 30px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em">{{det.t}}</h2><p style="margin: 2px 0 0; font-size: 15.5px; line-height: 1.5; color: rgba(255,255,255,0.92)">{{det.d}}</p></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px 24px">
+<span style="display: flex; align-items: center; gap: 10px"><span style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ico.clock}}"></path></svg></span><span style="display: flex; flex-direction: column"><b style="font-size: 16px">{{det.time}}</b><span style="font-size: 12.5px; color: rgba(255,255,255,0.85)">Bajarish vaqti</span></span></span>
+<span style="display: flex; align-items: center; gap: 10px"><span style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ico.user}}"></path></svg></span><span style="display: flex; flex-direction: column"><b style="font-size: 16px">{{dx.usage}}</b><span style="font-size: 12.5px; color: rgba(255,255,255,0.85)">marotaba foydalanilgan</span></span></span>
+</div>
+<span style="align-self: flex-start; display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 10px; background: rgba(255,255,255,0.2); font-size: 14.5px"><span style="color: #F5B800; font-size: 17px; letter-spacing: 1px">{{dx.stars}}</span><span>{{dx.rate}} ({{dx.rateN}} baho)</span><span style="font-size: 11.5px; padding: 2px 8px; border-radius: 6px; background: rgba(255,255,255,0.25)">Namuna</span></span>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<sc-if value="{{det.ready}}" hint-placeholder-val="{{true}}"><sc-if value="{{canStart}}" hint-placeholder-val="{{true}}"><button type="button" onClick="{{startFlow}}" style="height: 52px; padding: 0 26px; display: flex; align-items: center; gap: 8px; border: 0; border-radius: 14px; background: #2F855A; color: #FFFFFF; font-size: 16.5px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 18px -8px rgba(0,0,0,0.5)">{{det.act}} <span aria-hidden="true">→</span></button></sc-if></sc-if>
+<sc-if value="{{det.soon}}" hint-placeholder-val="{{false}}"><span style="height: 52px; padding: 0 20px; border-radius: 14px; background: rgba(255,255,255,0.2); font-size: 15px; display: flex; align-items: center">Tez orada ishga tushadi</span></sc-if>
+<button type="button" onClick="{{det.toggle}}" aria-pressed="{{det.favOn}}" style="height: 52px; padding: 0 20px; display: flex; align-items: center; gap: 8px; border-radius: 14px; border: 0; background: #FFFFFF; font-size: 15.5px; font-weight: 600; cursor: pointer; color: #1B2530"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" style="{{det.favSvg}}"><path d="{{ico.star}}"></path></svg>{{det.favLabel}}</button>
+<button type="button" aria-label="Ulashish" style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border-radius: 14px; border: 0; background: #FFFFFF; cursor: pointer; color: #1B2530"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"></path></svg></button>
+</div>
+<sc-if value="{{det.note}}" hint-placeholder-val="{{false}}"><span style="font-size: 14px; color: rgba(255,255,255,0.9); margin-top: -6px">{{det.note}}</span></sc-if>
+</section>
+<div style="padding: 22px 28px 30px; display: flex; flex-direction: column; gap: 18px">
+<div role="tablist" class="sscroll" style="display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--n200, #E6EEF2)"><sc-for list="{{dx.tabs}}" as="g" hint-placeholder-count="4"><button type="button" role="tab" onClick="{{g.pick}}" style="{{g.st}}">{{g.t}}</button></sc-for></div>
+<sc-if value="{{dx.tHow}}" hint-placeholder-val="{{true}}"><div class="nin" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px"><b style="font-size: 14.5px">Xizmat narxi</b><sc-if value="{{dx.isTarif}}" hint-placeholder-val="{{true}}"><span style="font-size: 13px; color: #4A5763">Tarif paketi limitidan yechiladi</span></sc-if></div>
+<sc-if value="{{dx.isTarif}}" hint-placeholder-val="{{true}}"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 1px; border-radius: 14px; overflow: hidden; background: var(--n200, #E6EEF2); border: 1px solid var(--n200, #E6EEF2)"><sc-for list="{{dx.tarifs}}" as="r" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; background: #FFFFFF"><span style="font-size: 12px; color: #4A5763">{{r.n}}</span><span style="font-size: 20px; line-height: 1.2; font-weight: 700; color: #1B2530">{{r.v}}</span><span style="font-size: 12px; color: #6B7885">korxona</span></div></sc-for></div></sc-if>
+<sc-if value="{{dx.isMoney}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; border-radius: 14px; background: #FFFFFF; border: 1px solid var(--n200, #E6EEF2)"><span style="font-size: 22px; line-height: 1.2; font-weight: 700; color: #1B2530">{{dx.moneyBig}}</span><span style="font-size: 13px; color: #4A5763">{{dx.moneyNote}}</span></div></sc-if>
+</div>
+<ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px"><sc-for list="{{dsteps}}" as="s" hint-placeholder-count="3"><li style="display: flex; gap: 10px; align-items: flex-start; padding: 12px; border-radius: 14px; background: var(--n50, #FAFCFD); border: 1px solid var(--n200, #E6EEF2)"><b style="flex: none; width: 26px; height: 26px; border-radius: 999px; background: var(--btn, #0077A0); color: #FFFFFF; font-size: 13px; display: flex; align-items: center; justify-content: center">{{s.n}}</b><span style="font-size: 14px; line-height: 1.4">{{s.t}}</span></li></sc-for></ol>
+<div style="display: flex; flex-direction: column; gap: 8px"><b style="font-size: 14.5px">Xizmat foydalanuvchilari</b><div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{dx.who}}" as="u" hint-placeholder-count="3"><span style="height: 32px; padding: 0 14px; border-radius: 999px; background: var(--p50, #E8F8FB); color: var(--p800, #004E6B); font-size: 14px; font-weight: 600; display: flex; align-items: center">{{u.t}}</span></sc-for></div></div>
+<sc-if value="{{hasSim}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-direction: column; gap: 8px"><b style="font-size: 14.5px">Shu sohada yana</b><div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{dsim}}" as="c" hint-placeholder-count="3"><button type="button" class="spill" onClick="{{c.pick}}" style="height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--n200, #E6EEF2); background: #FFFFFF; font-size: 14px; cursor: pointer; color: #1B2530">{{c.t}}</button></sc-for></div></div></sc-if>
+</div></sc-if>
+<sc-if value="{{dx.tDocs}}" hint-placeholder-val="{{false}}"><div class="nin" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px"><b style="font-size: 14.5px">Xizmatni olish uchun kerakli hujjatlar</b><sc-if value="{{dx.noDocs}}" hint-placeholder-val="{{false}}"><span style="font-size: 14.5px; color: #4A5763">Hujjat talab qilinmaydi.</span></sc-if><sc-for list="{{dx.docs}}" as="d" hint-placeholder-count="2"><div style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; background: var(--n50, #FAFCFD); border: 1px solid var(--n200, #E6EEF2); font-size: 14.5px"><span style="flex: none; width: 22px; height: 22px; border-radius: 999px; background: var(--p50, #E8F8FB); color: var(--p800, #004E6B); font-size: 13px; display: flex; align-items: center; justify-content: center">✓</span>{{d.t}}</div></sc-for></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><b style="font-size: 14.5px">Xizmat ko'rsatishning huquqiy asosi</b><p style="margin: 0; font-size: 14.5px; line-height: 1.55; color: #2C3844">{{dx.legal}}</p></div>
+</div></sc-if>
+<sc-if value="{{dx.tContact}}" hint-placeholder-val="{{false}}"><div class="nin" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px">
+<span style="display: flex; flex-direction: column; gap: 3px; padding: 14px; border-radius: 14px; background: var(--n50, #FAFCFD); border: 1px solid var(--n200, #E6EEF2)"><span style="font-size: 12px; color: #4A5763">Telefon</span><b style="font-size: 15px">{{dx.phone}}</b></span>
+<span style="display: flex; flex-direction: column; gap: 3px; padding: 14px; border-radius: 14px; background: var(--n50, #FAFCFD); border: 1px solid var(--n200, #E6EEF2)"><span style="font-size: 12px; color: #4A5763">E-pochta</span><b style="font-size: 15px">{{dx.email}}</b></span>
+</div></sc-if>
+<sc-if value="{{dx.tStat}}" hint-placeholder-val="{{false}}"><div class="nin" style="display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><sc-for list="{{dx.pers}}" as="h" hint-placeholder-count="3"><button type="button" onClick="{{h.pick}}" style="{{h.st}}">{{h.t}}</button></sc-for><span style="font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #FFF3DC; color: #9A5B00">NAMUNA</span></div>
+<span style="font-size: 14px; color: #4A5763"><b style="font-size: 26px; color: #1B2530">{{dx.usage}}</b> marta foydalanilgan · {{dx.since}}</span>
+<div style="display: flex; align-items: flex-end; gap: 6px; height: 150px; padding: 0 4px; border-bottom: 1px solid var(--n300, #D3DEE4)"><sc-for list="{{dx.chart}}" as="m" hint-placeholder-count="13"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; height: 100%"><div title="{{m.n}}" style="{{m.st}}"></div></div></sc-for></div>
+<div style="display: flex; gap: 6px; padding: 0 4px"><sc-for list="{{dx.chart}}" as="m" hint-placeholder-count="13"><span style="flex: 1; min-width: 0; text-align: center; font-size: 11.5px; color: #6B7885">{{m.l}}</span></sc-for></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 44px; line-height: 1; font-weight: 800">{{dx.rate}}</span><span style="font-size: 20px; color: #F0B72F; letter-spacing: 2px">{{dx.stars}}</span><span style="font-size: 13px; color: #4A5763">{{dx.rateN}} ta baho · namuna</span></div>
+<div style="flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 6px"><sc-for list="{{dx.bars}}" as="b" hint-placeholder-count="5"><div style="display: flex; align-items: center; gap: 10px; font-size: 13px"><b style="width: 12px">{{b.n}}</b><div style="flex: 1; height: 9px; border-radius: 999px; background: var(--n100, #F2F7F9); overflow: hidden"><div style="{{b.st}}"></div></div><span style="width: 36px; text-align: right; color: #4A5763">{{b.pct}}</span></div></sc-for></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px"><b style="font-size: 14.5px">Sharhlar <span style="font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #FFF3DC; color: #9A5B00; margin-left: 6px">NAMUNA</span></b><sc-for list="{{dx.reviews}}" as="r" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; border-radius: 12px; background: var(--n50, #FAFCFD); border: 1px solid var(--n200, #E6EEF2)"><span style="font-size: 13.5px"><b>{{r.who}}</b> <span style="color: #F0B72F; margin-left: 6px">{{r.st}}</span></span><span style="font-size: 14.5px; color: #2C3844">{{r.t}}</span></div></sc-for></div>
+</div></sc-if>
+</div>
+</div>
+
+</div>
+</sc-if>
+</div>
+<sc-if value="{{fl.open}}" hint-placeholder-val="{{false}}">
+<aside aria-label="Xizmat jarayoni" class="nin" style="flex: 1; min-width: 0; box-sizing: border-box; background: var(--n50, #FAFCFD); display: flex; flex-direction: column">
+<section style="background: radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0) 60%), linear-gradient(160deg, var(--p800, #004E6B) 0%, var(--btn, #0077A0) 58%, var(--accent, #0099B5) 100%); color: #FFFFFF; padding: 26px 32px 24px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; align-items: center; gap: 14px">
+<span style="flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF"><svg aria-hidden="true" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{fl.icon}}"></path></svg></span>
+<h2 style="flex: 1; min-width: 0; margin: 0; font-size: 28px; line-height: 1.2; font-weight: 800; letter-spacing: -0.02em">{{fl.svcName}}</h2>
+<button type="button" onClick="{{fl.close}}" aria-label="Jarayonni yopish" style="flex: none; width: 42px; height: 42px; border: 0; border-radius: 12px; background: rgba(255,255,255,0.2); font-size: 24px; line-height: 1; cursor: pointer; color: #FFFFFF">×</button>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+<span style="display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 16px 0 8px; border-radius: 999px; background: rgba(255,255,255,0.2); font-size: 14.5px"><span style="flex: none; width: 26px; height: 26px; border-radius: 999px; background: #FFFFFF; color: #157A3B; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center">✓</span><b>{{fl.userName}}</b><span style="color: rgba(255,255,255,0.85)">{{fl.userPhone}}</span></span>
+<span style="font-size: 14.5px; color: rgba(255,255,255,0.9)">Qadam {{fl.stepNo}} / {{fl.stepN}}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 8px"><sc-for list="{{fl.steps}}" as="p" hint-placeholder-count="4"><span style="{{p.numSt}}">{{p.n}}</span><span style="{{p.lineSt}}"></span></sc-for></div>
+</section>
+<div style="flex: 1; width: 100%; max-width: 780px; box-sizing: border-box; padding: 32px 32px 12px; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0; font-size: 28px; line-height: 1.2; font-weight: 800; letter-spacing: -0.02em">{{fl.title}}</h2><p style="margin: 0; font-size: 16.5px; line-height: 1.5; color: #4A5763">{{fl.desc}}</p></div>
+<sc-if value="{{fl.hasPay}}" hint-placeholder-val="{{false}}"><div style="border: 1px solid var(--n200, #E6EEF2); border-radius: 16px; background: #FFFFFF; overflow: hidden"><sc-for list="{{fl.payLines}}" as="r" hint-placeholder-count="3"><div style="display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--n100, #F2F7F9); font-size: 15.5px"><span style="color: #4A5763">{{r.k}}</span><span style="text-align: right">{{r.v}}</span></div></sc-for><div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: var(--p50, #E8F8FB)"><b style="font-size: 16.5px">To'lanadi</b><b style="font-size: 22px; color: var(--p800, #004E6B)">{{fl.payTotal}}</b></div></div></sc-if>
+<sc-if value="{{fl.hasFields}}" hint-placeholder-val="{{true}}"><div style="display: flex; flex-direction: column; gap: 20px">
+<sc-for list="{{fl.fields}}" as="x" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 15.5px; font-weight: 600">{{x.l}}</span>
+<sc-if value="{{x.isInput}}" hint-placeholder-val="{{true}}"><input type="text" value="{{x.val}}" onChange="{{x.set}}" onKeyDown="{{fl.kd}}" placeholder="{{x.p}}" style="height: 62px; box-sizing: border-box; padding: 0 16px; border-radius: 14px; border: 1px solid var(--n300, #D3DEE4); background: #FFFFFF; color: #1B2530; font: inherit; font-size: 18px"></sc-if>
+<sc-if value="{{x.isSelect}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{x.opts}}" as="o" hint-placeholder-count="3"><button type="button" onClick="{{o.pick}}" style="{{o.st}}">{{o.t}}</button></sc-for></div></sc-if>
+</div></sc-for>
+<sc-if value="{{fl.hasHint}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: #6B7885">{{fl.hint}}</span></sc-if>
+</div></sc-if>
+<sc-if value="{{fl.isWait}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-direction: column; gap: 16px; padding: 8px 0"><div style="display: flex; align-items: center; gap: 14px"><span class="jspin" style="flex: none; width: 34px; height: 34px; border-radius: 999px; border: 4px solid var(--p100, #D4F1F7); border-top-color: var(--btn, #0077A0)"></span><b style="font-size: 19px">{{fl.waitText}}</b></div>
+<div style="height: 8px; border-radius: 999px; background: var(--n100, #F2F7F9); overflow: hidden"><div class="jfill" style="height: 100%; background: var(--btn, #0077A0); border-radius: 999px"></div></div>
+<sc-for list="{{fl.checks}}" as="k" hint-placeholder-count="3"><div style="display: flex; align-items: center; gap: 10px; font-size: 16.5px"><span style="flex: none; width: 22px; height: 22px; border-radius: 999px; background: #E7F6EC; color: #157A3B; font-size: 13px; display: flex; align-items: center; justify-content: center">✓</span>{{k.t}}</div></sc-for></div></sc-if>
+<sc-if value="{{fl.isResult}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-direction: column; gap: 14px"><div style="display: flex; align-items: center; gap: 12px"><span style="flex: none; width: 48px; height: 48px; border-radius: 999px; background: #1EB53A; color: #FFFFFF; font-size: 20px; display: flex; align-items: center; justify-content: center">✓</span><b style="font-size: 26px">{{fl.res.title}}</b></div>
+<div style="border: 1px solid var(--n200, #E6EEF2); border-radius: 14px; overflow: hidden"><sc-for list="{{fl.res.lines}}" as="r" hint-placeholder-count="3"><div style="display: flex; justify-content: space-between; gap: 12px; padding: 15px 20px; border-bottom: 1px solid var(--n100, #F2F7F9); font-size: 16.5px"><span style="color: #4A5763">{{r.k}}</span><b style="text-align: right">{{r.v}}</b></div></sc-for></div>
+<span style="font-size: 13px; color: #6B7885">{{fl.res.note}}</span></div></sc-if>
+<sc-if value="{{fl.hasTl}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 14px; background: var(--n50, #FAFCFD); border: 1px solid var(--n200, #E6EEF2)"><b style="font-size: 15px">Ariza holati</b><sc-for list="{{fl.tl}}" as="q" hint-placeholder-count="3"><div style="display: flex; gap: 12px"><span style="{{q.dot}}"></span><span style="display: flex; flex-direction: column"><b style="font-size: 14.5px">{{q.t}}</b><span style="font-size: 13px; color: #4A5763">{{q.d}}</span></span></div></sc-for></div></sc-if>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 32px 24px; border-top: 1px solid var(--n200, #E6EEF2); background: #FFFFFF">
+<span><sc-if value="{{fl.hasBack}}" hint-placeholder-val="{{false}}"><button type="button" onClick="{{fl.back}}" style="height: 56px; padding: 0 26px; border-radius: 16px; border: 1px solid var(--n300, #D3DEE4); background: #FFFFFF; font-size: 16.5px; font-weight: 600; cursor: pointer; color: #1B2530">Orqaga</button></sc-if></span>
+<button type="button" onClick="{{fl.next}}" style="{{fl.nextSt}}">{{fl.nextLabel}} <span aria-hidden="true">→</span></button>
+</div>
+</aside>
+</sc-if>
+
+</div>
+</main>
+<footer style="background: var(--p800, #004E6B); color: #FFFFFF">
+<div style="padding: 36px 40px 24px; display: flex; flex-wrap: wrap; gap: 32px 64px">
+<div style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 10px; max-width: 380px">
+<span style="font-size: 20px; font-weight: 800; letter-spacing: -0.03em">my.stat.uz</span>
+<span style="font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.82)">O'zbekiston Respublikasi rasmiy statistika portali. Hisobotlar, ko'rsatkichlar va ma'lumot xizmatlari bir joyda.</span>
+</div>
+<nav aria-label="Pastki menyu" style="display: flex; flex-wrap: wrap; gap: 28px 64px; font-size: 14px">
+<div style="display: flex; flex-direction: column; gap: 8px"><b style="font-size: 12px; letter-spacing: 0.08em; color: rgba(255,255,255,0.7)">XIZMATLAR</b><a href="#" style="color: #FFFFFF">Hisobot topshirish</a><a href="#" style="color: #FFFFFF">Korxonani tekshirish</a><a href="#" style="color: #FFFFFF">Ochiq API</a></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><b style="font-size: 12px; letter-spacing: 0.08em; color: rgba(255,255,255,0.7)">MA'LUMOTLAR</b><a href="#" style="color: #FFFFFF">Ko'rsatkichlar</a><a href="#" style="color: #FFFFFF">Hududlar</a><a href="#" style="color: #FFFFFF">Nashrlar</a></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><b style="font-size: 12px; letter-spacing: 0.08em; color: rgba(255,255,255,0.7)">YORDAM</b><a href="#" style="color: #FFFFFF">Konsultatsiya</a><a href="#" style="color: #FFFFFF">Atamalar lug'ati</a><a href="#" style="color: #FFFFFF">Bog'lanish</a></div>
+</nav>
+</div>
+<div style="padding: 14px 40px; border-top: 1px solid rgba(255,255,255,0.18); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.75)"><span>© 2026 my.stat.uz</span><span>Sahifadagi barcha raqamlar — namuna (sintetik ma'lumot)</span></div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"palette":{"editor":"enum","options":["bayroq", "davlat", "zumrad", "dengiz", "grafit", "indigo", "lojuvard", "terrakota", "oltin", "shalfey", "qumtosh", "feruza-oltin", "lojuvard-terrakota", "alvon-moviy", "quyosh", "bahor", "osmon", "bayram"],"default":"bayroq","section":"Palitra"},"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+componentDidMount() {
+var self = this;
+try { var v = window.localStorage.getItem('mystat-palette'); if (v !== null) self.setState({ pal: parseInt(v, 10) }); } catch (e) {}
+this.__onStore = function (ev) { try { if (ev.key === 'mystat-palette' && ev.newValue !== null) self.setState({ pal: parseInt(ev.newValue, 10) }); } catch (e) {} };
+try { window.addEventListener('storage', this.__onStore); } catch (e) {}
+this.__tick = setInterval(function () { self.setState({ tick: ((self.state && self.state.tick) || 0) + 1 }); }, 1000);
+}
+componentWillUnmount() {
+try { window.removeEventListener('storage', this.__onStore); } catch (e) {}
+clearInterval(this.__tick);
+}
+renderVals() {
+var __me = this;
+var __P = [{"btn": "#0077A0", "p700": "#00668A", "p800": "#004E6B", "accent": "#0099B5", "p50": "#E8F8FB", "p100": "#D4F1F7", "p200": "#A6E1EE", "p300": "#6CCBE0", "p400": "#33B6D1", "n50": "#FAFCFD", "n100": "#F2F7F9", "n200": "#E6EEF2", "n300": "#D3DEE4", "name": "Bayroq ko'ki", "cat": "Asosiy", "key": "bayroq"}, {"btn": "#1C65C3", "p700": "#1855A5", "p800": "#12417E", "accent": "#2A7DE1", "p50": "#EBF2FB", "p100": "#D4E4F7", "p200": "#AAC8EF", "p300": "#79A9E6", "p400": "#4789DD", "n50": "#FAFBFC", "n100": "#F2F5F7", "n200": "#E6EAEF", "n300": "#D4DBE4", "name": "Davlat ko'ki", "cat": "Asosiy", "key": "davlat"}, {"btn": "#117E4D", "p700": "#0F6B42", "p800": "#0B5433", "accent": "#14935A", "p50": "#EAF5F0", "p100": "#D2EAE0", "p200": "#A6D6C0", "p300": "#72BE9C", "p400": "#3EA678", "n50": "#FAFBFA", "n100": "#F2F6F4", "n200": "#E6ECEA", "n300": "#D4DFDA", "name": "Zumrad", "cat": "Asosiy", "key": "zumrad"}, {"btn": "#274978", "p700": "#203C63", "p800": "#192E4C", "accent": "#3A6CB0", "p50": "#EDF2F8", "p100": "#DAE3F0", "p200": "#B4C7E1", "p300": "#89A7D0", "p400": "#5D86BE", "n50": "#FAFAFB", "n100": "#F2F4F6", "n200": "#E6E9ED", "n300": "#D4D9E1", "name": "To'q dengiz", "cat": "Asosiy", "key": "dengiz"}, {"btn": "#3F576E", "p700": "#334759", "p800": "#283746", "accent": "#5B7E9F", "p50": "#F0F3F6", "p100": "#E0E6ED", "p200": "#C1CEDB", "p300": "#9DB2C5", "p400": "#7995B0", "n50": "#FAFAFB", "n100": "#F3F4F6", "n200": "#E8EAEC", "n300": "#D7DBDF", "name": "Grafit", "cat": "Asosiy", "key": "grafit"}, {"btn": "#4457C9", "p700": "#3A4AAB", "p800": "#2C3881", "accent": "#4457C9", "p50": "#EEF0FA", "p100": "#DBDFF5", "p200": "#B8BFEA", "p300": "#8F9ADF", "p400": "#6675D3", "n50": "#FAFAFB", "n100": "#F3F3F6", "n200": "#E6E8EC", "n300": "#D5D7DF", "name": "Indigo", "cat": "Sovuq", "key": "indigo"}, {"btn": "#284C9A", "p700": "#223F80", "p800": "#192F5E", "accent": "#3461C2", "p50": "#ECEFF6", "p100": "#D7DEED", "p200": "#AEBCDB", "p300": "#7F95C6", "p400": "#506FB1", "n50": "#FAFAFB", "n100": "#F2F3F5", "n200": "#E6E8EB", "n300": "#D4D7DD", "name": "Lojuvard", "cat": "Sovuq", "key": "lojuvard"}, {"btn": "#AA4E27", "p700": "#8F4221", "p800": "#6B3119", "accent": "#C0592C", "p50": "#F8F0EC", "p100": "#F1DED7", "p200": "#E3BEAE", "p300": "#D3987F", "p400": "#C27250", "n50": "#FBFBFA", "n100": "#F6F5F4", "n200": "#ECEAE9", "n300": "#DFDBD9", "name": "Terrakota", "cat": "Issiq", "key": "terrakota"}, {"btn": "#9B6211", "p700": "#81520E", "p800": "#613D0A", "accent": "#B5741A", "p50": "#F7F2EA", "p100": "#EEE3D2", "p200": "#DEC6A5", "p300": "#CBA671", "p400": "#B8853D", "n50": "#FBFBFA", "n100": "#F6F5F4", "n200": "#ECEBE8", "n300": "#DFDCD8", "name": "Oltin", "cat": "Issiq", "key": "oltin"}, {"btn": "#486F5F", "p700": "#3D5E50", "p800": "#2E473C", "accent": "#5A8A75", "p50": "#EFF3F1", "p100": "#DEE6E2", "p200": "#BCCCC6", "p300": "#95AFA4", "p400": "#6F9283", "n50": "#FAFBFB", "n100": "#F4F5F5", "n200": "#EAEBEA", "n300": "#DADDDC", "name": "Shalfey", "cat": "Mo'tadil", "key": "shalfey"}, {"btn": "#715F4A", "p700": "#60513F", "p800": "#493D30", "accent": "#8A7358", "p50": "#F3F1EF", "p100": "#E6E2DE", "p200": "#CCC5BC", "p300": "#AFA396", "p400": "#928270", "n50": "#FBFBFB", "n100": "#F5F5F5", "n200": "#ECEBEA", "n300": "#DEDDDB", "name": "Qumtosh", "cat": "Mo'tadil", "key": "qumtosh"}, {"btn": "#0D757E", "p700": "#0B626A", "p800": "#08494F", "accent": "#B5741A", "p50": "#E9F3F4", "p100": "#D1E6E8", "p200": "#A3CDD1", "p300": "#6EB0B6", "p400": "#39949C", "n50": "#FAFBFB", "n100": "#F3F5F5", "n200": "#E8EBEB", "n300": "#D7DCDD", "name": "Feruza va oltin", "cat": "Aralash", "key": "feruza-oltin"}, {"btn": "#284C9A", "p700": "#223F80", "p800": "#192F5E", "accent": "#C0592C", "p50": "#ECEFF6", "p100": "#D7DEED", "p200": "#AEBCDB", "p300": "#7F95C6", "p400": "#506FB1", "n50": "#FAFAFB", "n100": "#F3F4F5", "n200": "#E8E9EB", "n300": "#D7D9DD", "name": "Lojuvard va terrakota", "cat": "Aralash", "key": "lojuvard-terrakota"}, {"btn": "#1D3F75", "p700": "#17335F", "p800": "#10264A", "accent": "#B0102A", "p50": "#EAF4FD", "p100": "#D6EAFB", "p200": "#ADD4F6", "p300": "#7FBBF0", "p400": "#4FA1EA", "n50": "#FAFBFC", "n100": "#F2F5F8", "n200": "#E6EBF1", "n300": "#D3DBE5", "name": "Alvon va moviy", "cat": "Aralash", "key": "alvon-moviy"}, {"btn": "#B65022", "p700": "#9D451E", "p800": "#773417", "accent": "#E8552A", "p50": "#FDEAE2", "p100": "#FCDBCD", "p200": "#FAC6B0", "p300": "#F7A682", "p400": "#F48554", "n50": "#FBFBFA", "n100": "#F6F5F4", "n200": "#ECEBEA", "n300": "#DFDCDA", "name": "Quyosh", "cat": "Quvnoq", "key": "quyosh"}, {"btn": "#0E7D5D", "p700": "#0D6D51", "p800": "#09523D", "accent": "#E0553F", "p50": "#DEF2ED", "p100": "#C6E9DF", "p200": "#A5DDCD", "p300": "#71C9B0", "p400": "#3DB593", "n50": "#FAFBFB", "n100": "#F4F6F5", "n200": "#E8ECEB", "n300": "#D8DFDD", "name": "Bahor", "cat": "Quvnoq", "key": "bahor"}, {"btn": "#1871C2", "p700": "#1561A8", "p800": "#104A7F", "accent": "#D6337A", "p50": "#DFEFFD", "p100": "#C9E3FB", "p200": "#AAD3F9", "p300": "#78B9F6", "p400": "#46A0F3", "n50": "#FAFBFB", "n100": "#F3F5F7", "n200": "#E8EBEE", "n300": "#D7DCE2", "name": "Osmon", "cat": "Quvnoq", "key": "osmon"}, {"btn": "#7649F2", "p700": "#643ECF", "p800": "#4C2F9C", "accent": "#E0408A", "p50": "#EDE6FF", "p100": "#E0D4FF", "p200": "#CDBBFF", "p300": "#B094FF", "p400": "#946DFF", "n50": "#FBFAFB", "n100": "#F5F4F6", "n200": "#EAE9ED", "n300": "#DBD9E1", "name": "Bayram", "cat": "Quvnoq", "key": "bayram"}];
+var __keys = __P.map(function (p) { return p.key; });
+var __def = Math.max(0, __keys.indexOf(this.props.palette || 'bayroq'));
+var __pi = (this.state && typeof this.state.pal === 'number' && __P[this.state.pal]) ? this.state.pal : __def;
+var __cur = __P[__pi];
+var __vars = ["btn", "p700", "p800", "accent", "p50", "p100", "p200", "p300", "p400", "n50", "n100", "n200", "n300"].map(function (k) { return '--' + k + ': ' + __cur[k] + ';'; }).join(' ');
+var __sw = function (c) { return 'display: block; width: 12px; height: 12px; border-radius: 2px; background: ' + c + '; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25)'; };
+var __bar = __P.map(function (p, i) {
+var on = i === __pi;
+return { name: p.name, cat: p.cat, on: on ? 'true' : 'false', s1: __sw(p.btn), s2: __sw(p.accent), s3: __sw(p.p200), s4: __sw(p.p50),
+pick: function () { __me.setState({ pal: i, palClosed: true }); try { window.localStorage.setItem('mystat-palette', String(i)); } catch (e) {} },
+style: 'height: 32px; padding: 0 10px; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 12px; cursor: pointer; border-radius: 4px; border: 1px solid ' + (on ? '#FFFFFF' : '#4A5763') + '; background: ' + (on ? '#FFFFFF' : 'transparent') + '; color: ' + (on ? '#1B2530' : '#FFFFFF') + '; font-weight: ' + (on ? '600' : '400') };
+});
+var __groups = [];
+__bar.forEach(function (b) { var g = __groups[__groups.length - 1]; if (!g || g.label !== b.cat) { g = { label: b.cat, items: [] }; __groups.push(g); } g.items.push(b); });
+var __palUi = { open: !(this.state && this.state.palClosed), closed: !!(this.state && this.state.palClosed), name: __cur.name,
+s1: __sw(__cur.btn), s2: __sw(__cur.accent), s3: __sw(__cur.p200), s4: __sw(__cur.p50),
+show: function () { __me.setState({ palClosed: false }); }, hide: function () { __me.setState({ palClosed: true }); } };
+var S = this.state || {};
+var TK = S.tick || 0, T = Math.floor(TK / 3);
+var fmt = function (n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); };
+var wav = function (seed, t) { return Math.sin(t * 0.61 + seed * 1.7) * 0.6 + Math.sin(t * 0.23 + seed * 3.1) * 0.4; };
+var now = new Date(), tz = new Date(now.getTime() + 5 * 3600000);
+var pad = function (x) { return (x < 10 ? '0' : '') + x; };
+var secOfDay = tz.getUTCHours() * 3600 + tz.getUTCMinutes() * 60 + tz.getUTCSeconds();
+var dayFrac = Math.max(0.05, secOfDay / 86400);
+var WDF = ["yakshanba", "dushanba", "seshanba", "chorshanba", "payshanba", "juma", "shanba"];
+var MOG = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"];
+var clock = pad(tz.getUTCHours()) + ':' + pad(tz.getUTCMinutes());
+var clockS = clock + ':' + pad(tz.getUTCSeconds());
+var dateStr = tz.getUTCDate() + '-' + MOG.at(tz.getUTCMonth()) + ', ' + tz.getUTCFullYear() + '-yil, ' + WDF.at(tz.getUTCDay());
+var ICO = {
+rep: "M6 3h9l4 4v14H6zM15 3v4h4M9 12h7M9 16h7", form: "M4 4h16v16H4zM8 9h8M8 13h8M8 17h5", cal: "M4 6h16v14H4zM4 10h16M8 3v4M16 3v4",
+bld: "M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6", chk: "M10 17a7 7 0 1 1 0-14 7 7 0 0 1 0 14zM21 21l-5.6-5.6M7 10l2 2 4-4", chart: "M4 20V10M10 20V4M16 20v-7M22 20H2",
+cls: "M4 5h16M4 12h10M4 19h6", req: "M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12zM8 11h8M8 14h5", map: "M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14",
+trade: "M3 17l6-6 4 4 8-8M15 7h6v6", part: "M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 8 1 8 5", dem: "M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 6-5s6 2 6 5M17 11a3 3 0 1 0 0-6M22 20c0-3-2-5-5-5",
+book: "M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4zM20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z", cons: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 4-6 8-6s8 2 8 6", api: "M8 8l-5 4 5 4M16 8l5 4-5 4M14 4l-4 16",
+coin: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9 9.5c0-1.4 1.3-2 3-2s3 .8 3 2c0 2.8-6 1.4-6 4.5 0 1.2 1.3 2 3 2s3-.6 3-2M12 6v12", wage: "M3 7h18v10H3zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 10v4M18 10v4", price: "M3 12l9-9h8v8l-9 9zM15 8h.01",
+name: "M4 7V5h16v2M9 5v14M15 19h-6", poll: "M4 4h16v16H4zM8 15v-3M12 15V9M16 15v-5", calc: "M6 3h12v18H6zM9 7h6M9 11h.01M12 11h.01M15 11h.01M9 15h.01M12 15h.01M15 15h.01", learn: "M2 9l10-5 10 5-10 5zM6 11v5c3 2 9 2 12 0v-5",
+gloss: "M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11", sign: "M3 17c3-1 5-6 7-6s1 4 3 4 3-3 5-3M4 21h16", bell: "M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 0 0 4 0", ai: "M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z", srq: "M4 4h16v12H8l-4 4zM8 9h8"
+};
+var CATS = [["biz", "Korxonalar uchun"], ["data", "Ma'lumot va tahlil"], ["cit", "Fuqarolar uchun"], ["help", "Hisob va yordam"]];
+var SVL = [
+["Hisobot topshirish", "Statistik hisobotlarni onlayn topshirish", "biz", 18400, "rep", false],
+["Hisobot shakllari", "108 ta shakl va to'ldirish yo'riqnomalari", "biz", 7120, "form", false],
+["Hisobotlar kalendari", "Korxonangiz muddatlari va eslatmalar", "biz", 5480, "cal", false],
+["Korxonani tekshirish", "STIR bo'yicha umumiy ball va profil", "biz", 4630, "chk", true],
+["Korxona ma'lumotnomasi", "STIR bo'yicha korxona kartochkasi", "biz", 3260, "bld", false],
+["Ko'rsatkichlar va dashboardlar", "Mavzular bo'yicha rasmiy ko'rsatkichlar, embed", "data", 2980, "chart", false],
+["Statistik tasniflagichlar", "Tasniflagich hujjatlari va kod daraxti", "data", 2350, "cls", false],
+["Individual ma'lumot so'rovi", "Kerakli statistik ma'lumotni buyurtma qilish", "data", 1420, "req", false],
+["Hududlar va prognoz", "Salohiyat indeksi va hududiy prognoz", "data", 1310, "map", false],
+["Mening ish haqim", "Ish haqingizni tarmoq va hudud bilan solishtiring", "cit", 1190, "wage", true],
+["Narxlar", "Asosiy mahsulot va xizmatlar narxlari", "cit", 1060, "price", true],
+["Demografiya ma'lumotlari", "Aholi tarkibi, CSV eksport", "data", 880, "dem", true],
+["Tashqi savdo va bozor tahlili", "Eksport, import va bozor hisobotlari", "data", 640, "trade", false],
+["Ismlar statistikasi", "Yangi tug'ilganlarga qo'yilgan ismlar", "cit", 610, "name", true],
+["Hamkor va raqobatchi qidiruvi", "Tarmoq va hudud bo'yicha korxonalar, XLSX", "biz", 540, "part", true],
+["ISN kalkulyatori", "Iste'mol narxlari indeksi bo'yicha hisob", "cit", 470, "calc", false],
+["Nashrlarni buyurtma qilish", "To'plamlar va byulletenlar, Click orqali to'lov", "help", 410, "book", false],
+["Xizmat so'rovlari", "So'rov yuborish va javoblarni kuzatish", "help", 380, "srq", false],
+["So'rovnomalar", "Statistik so'rovnomalarda ishtirok etish", "cit", 330, "poll", true],
+["Mutaxassis konsultatsiyasi", "Qulay vaqtni onlayn band qilish", "help", 286, "cons", false],
+["Tariflar va StatCoin", "Xizmat paketlari va kredit hamyoni", "help", 240, "coin", false],
+["Shartnoma (DIDOX) va ERI", "Xizmatlar uchun elektron shartnoma", "help", 190, "sign", false],
+["Xabarnomalar va obunalar", "Yangi ma'lumotlar va muddatlar haqida xabar", "help", 160, "bell", false],
+["Statistikani o'rganish", "Qisqa darslar va tushuntirishlar", "cit", 140, "learn", true],
+["Atamalar lug'ati", "Statistik atamalarning izohlari", "cit", 120, "gloss", true],
+["Ochiq API va kalitlar", "Ma'lumotlarni tizimingizga ulash", "data", 94, "api", false]
+];
+var CN = {}; CATS.forEach(function (c) { CN[c[0]] = c[1]; });
+var q = (typeof S.q === 'string' ? S.q : '').trim(), ql = q.toLowerCase();
+var cat = S.cat || 'all';
+var list = SVL.map(function (s, i) {
+var use = s[3] * dayFrac * (1 + 0.02 * wav(i + 7, T));
+var d = 4 * wav(i + 3, T);
+return { t: s[0], d: s[1], cat: s[2], catName: CN[s[2]], icon: ICO[s[4]], sample: s[5], u: use, use: fmt(use), dlt: (d >= 0 ? '+' : '−') + Math.abs(d).toFixed(1) + '%', up: d >= 0, i: i };
+}).sort(function (a, b) { return b.u - a.u; });
+list.forEach(function (s, k) { s.rank = k + 1; s.no = (k + 1 < 10 ? '0' : '') + (k + 1); });
+var hits = list.filter(function (s) { return (!ql || (s.t + ' ' + s.d + ' ' + s.catName).toLowerCase().indexOf(ql) >= 0) && (cat === 'all' || s.cat === cat); });
+var catTabs = [['all', 'Hammasi']].concat(CATS).map(function (c) { var n = c[0] === 'all' ? list.length : list.filter(function (s) { return s.cat === c[0]; }).length; return { id: c[0], label: c[1], n: n, on: c[0] === cat, onA: c[0] === cat ? 'true' : 'false', pick: function () { __me.setState({ cat: c[0] }); } }; });
+var srch = { q: typeof S.q === 'string' ? S.q : '', has: !!q, n: hits.length, none: hits.length === 0,
+type: function (e) { __me.setState({ q: e.target.value }); },
+submit: function (e) { if (e && e.preventDefault) e.preventDefault(); },
+clear: function () { __me.setState({ q: '', cat: 'all' }); } };
+var totalToday = fmt(list.reduce(function (a, s) { return a + s.u; }, 0));
+var ICO2 = { panel: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z", help: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01", life: "M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z", back: "M5 12h14M13 6l6 6-6 6", star: "M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z", clock: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2", bolt: "M13 3L5 14h6l-1 7 8-11h-6z", user: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 4-6 8-6s8 2 8 6", brief: "M3 8h18v12H3zM8 8V5h8v3M3 14h18", lens: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-3.5-3.5", code: "M8 8l-5 4 5 4M16 8l5 4-5 4M14 4l-4 16" };
+var __ic = function (k) { return ICO[k] || ICO2[k] || ICO2.panel; };
+var CT = [['kor', 'Korxonalar va tashkilotlar'], ['his', 'Hisobot topshirish'], ['sav', 'Tashqi savdo'], ['biz', 'Biznes tahlili'], ['nar', 'Narxlar va inflyatsiya'], ['aho', 'Aholi va demografiya'], ['meh', 'Mehnat va ish haqi'], ['hud', 'Hududlar'], ['san', 'Sanoat'], ['nas', 'Nashrlar'], ['tas', 'Tasniflagichlar va metodologiya'], ['och', 'Ochiq ma\'lumotlar'], ['fuq', 'Fuqarolar uchun'], ['tar', 'Tariflar va shartnomalar']];
+var CNm = {}; CT.forEach(function (c) { CNm[c[0]] = c[1]; });
+// [id, nomi, tavsif, soha, belgi, muddat, tez orada(1), auditoriya (f=fuqaro t=tadbirkor r=tahlilchi d=dasturchi), mashhur(1)]
+var SX = [
+[101, 'Korxona to\'g\'risida ma\'lumot', 'STIR kiriting va korxonaning rasmiy ma\'lumot kartochkasini oling', 'kor', 'bld', '1 daqiqa', 0, 'tr', 1],
+[102, 'Kontragentni tekshirish', 'Hamkor korxona ishonchliligini umumiy ball bilan tekshiring', 'kor', 'chk', '1 daqiqa', 0, 't', 1],
+[103, 'Statistik kodlar ma\'lumotnomasi', 'Korxonangizning statistik kodlari bo\'yicha rasmiy ma\'lumotnoma', 'kor', 'form', '1 daqiqa', 0, 't', 0],
+[104, 'Ma\'lumotnomani tekshirish', 'Qo\'lingizdagi ma\'lumotnoma haqiqiyligini raqami bo\'yicha tekshiring', 'kor', 'chk', 'Darhol', 0, 'tf', 0],
+[105, 'Korxona va tashkilotlar ro\'yxati', 'Hudud va faoliyat turi bo\'yicha korxonalarni qidiring', 'kor', 'cls', 'Darhol', 0, 'tr', 0],
+[106, 'KTUT bo\'yicha korxona', 'KTUT bo\'yicha tashkilot ma\'lumotlarini toping', 'kor', 'bld', 'Darhol', 0, 't', 0],
+[203, 'Taqdim etiladigan hisobotlar ro\'yxati', 'Korxonangiz qaysi hisobotlarni topshirishi kerakligini bilib oling', 'his', 'rep', 'Darhol', 0, 't', 1],
+[204, 'Reglamentlar', 'Hisobot topshirish tartibi va muddatlari bo\'yicha hujjatlar', 'his', 'form', 'Darhol', 0, 't', 0],
+[301, 'Tashqi savdo statistikasi', 'Eksport va import hajmi: mahsulot va davlat kesimida', 'sav', 'trade', 'Darhol', 0, 'tr', 1],
+[302, 'Bozor tahlili', 'Mahsulotingiz bozorlari va narx tendensiyasini ko\'ring', 'sav', 'chart', '1 daqiqa', 0, 'tr', 0],
+[303, 'Savdo oqimlari', 'Davlatlar o\'rtasidagi savdo yo\'nalishlari xaritada', 'sav', 'map', 'Darhol', 0, 'r', 0],
+[401, 'Hamkor va raqobatchilarni qidirish', 'Tarmoq va hudud bo\'yicha korxonalarni topib, ro\'yxatini yuklab oling', 'biz', 'part', '1 daqiqa', 0, 't', 1],
+[403, 'Tahliliy ma\'lumot tayyorlash', 'Mutaxassislar sizning so\'rovingiz bo\'yicha tahlil tayyorlaydi', 'biz', 'chart', '1–3 ish kuni', 0, 'tr', 0],
+[404, 'Individual ma\'lumot so\'rovi', 'Portalda yo\'q ma\'lumotni alohida buyurtma qiling', 'biz', 'req', '1–3 ish kuni', 0, 'tfr', 0],
+[501, 'Inflyatsiya kalkulyatori', 'Pulingiz qiymati vaqt o\'tishi bilan qanchaga o\'zgarganini hisoblang', 'nar', 'calc', 'Darhol', 0, 'ft', 1],
+[502, 'Narxlar monitoringi', 'Mahsulot va xizmatlar narxlari o\'zgarishini kuzating', 'nar', 'price', 'Darhol', 0, 'ftr', 0],
+[503, 'Shaxsiy inflyatsiya', 'Xarajatlaringizga mos o\'z inflyatsiyangizni bilib oling', 'nar', 'calc', 'Darhol', 1, 'f', 0],
+[601, 'Demografik ma\'lumotlar', 'Aholi soni, tarkibi va o\'zgarishi: hudud bo\'yicha, yuklab olinadi', 'aho', 'dem', 'Darhol', 0, 'rf', 1],
+[602, 'Ismlar statistikasi', 'Eng ko\'p qo\'yiladigan ismlar va yillar bo\'yicha o\'zgarishi', 'aho', 'name', 'Darhol', 0, 'f', 0],
+[603, 'Aholi paneli', 'Aholi ko\'rsatkichlari bir ekranda', 'aho', 'panel', 'Darhol', 0, 'r', 0],
+[701, 'Mening maoshim', 'Maoshingizni tarmoq va hudud bo\'yicha o\'rtacha bilan solishtiring', 'meh', 'wage', 'Darhol', 0, 'f', 1],
+[702, 'Mehnat bozori paneli', 'Bandlik va ish haqi ko\'rsatkichlari bir ekranda', 'meh', 'panel', 'Darhol', 0, 'r', 0],
+[801, 'Hududlar xaritasi', 'Viloyat va tumanlar ko\'rsatkichlarini xaritada ko\'ring', 'hud', 'map', 'Darhol', 0, 'rf', 1],
+[802, 'Iqtisodiyot paneli', 'Hududlarning iqtisodiy ko\'rsatkichlari bir ekranda', 'hud', 'panel', 'Darhol', 0, 'r', 0],
+[901, 'Sanoat mahsulotlari ishlab chiqaruvchilari', 'Mahsulot turi bo\'yicha ishlab chiqaruvchi korxonalarni toping', 'san', 'part', 'Darhol', 0, 't', 0],
+[902, 'Tarmoq sahifasi', 'Sanoat tarmog\'i bo\'yicha yagona sahifa', 'san', 'cls', 'Darhol', 1, 'tr', 0],
+[1001, 'Nashrlarga elektron buyurtma', 'Statistik to\'plam va byulletenlarni elektron buyurtma qiling', 'nas', 'book', '3 daqiqa', 0, 'ftr', 0],
+[1101, 'Statistik tasniflagichlar', 'Rasmiy tasniflagich va kodlar ro\'yxati', 'tas', 'cls', 'Darhol', 0, 'trd', 0],
+[1102, 'Korxona bali metodologiyasi', 'Korxonaning umumiy bali qanday hisoblanishi', 'tas', 'form', 'Darhol', 0, 'tr', 0],
+[1103, 'Kontragent kartasi metodologiyasi', 'Kontragent kartasi ma\'lumotlari qanday shakllanishi', 'tas', 'form', 'Darhol', 0, 't', 0],
+[1104, 'Statistik atamalar lug\'ati', 'Statistik atamalarning oddiy tilda izohi', 'tas', 'gloss', 'Darhol', 0, 'fr', 0],
+[1201, 'Ochiq API', 'Ma\'lumotlarni o\'z tizimingizga avtomatik ulang', 'och', 'api', '1 daqiqa', 0, 'd', 1],
+[1202, 'Mavzuli panellar', 'Mavzu bo\'yicha tayyor interaktiv panellar', 'och', 'panel', 'Darhol', 0, 'rd', 0],
+[1203, 'E\'lonlar kalendari', 'Yangi ma\'lumotlar qachon chiqishi jadvali', 'och', 'cal', 'Darhol', 0, 'rft', 0],
+[1204, 'Ko\'rsatkichlarga obuna', 'Ma\'lumot yangilanganda xabar oling', 'och', 'bell', '1 daqiqa', 0, 'rtfd', 0],
+[1301, 'Hayotiy vaziyatlar', 'Hayotiy vaziyatingizga mos ma\'lumot va xizmatlar', 'fuq', 'life', 'Darhol', 0, 'f', 1],
+[1302, 'Statistika oddiy tilda', 'Raqamlar ma\'nosi sodda tushuntirishda', 'fuq', 'learn', 'Darhol', 0, 'f', 0],
+[1303, 'So\'rovnomalarda ishtirok', 'Rasmiy statistik so\'rovnomalarda ishtirok eting', 'fuq', 'poll', '1 daqiqa', 0, 'f', 0],
+[1304, 'Ko\'p beriladigan savollar', 'Portal haqida tez-tez beriladigan savollarga javoblar', 'fuq', 'help', 'Darhol', 0, 'ft', 0],
+[1401, 'Tariflar va paketlar', 'Xizmat paketlari va ularning narxlari', 'tar', 'coin', 'Darhol', 0, 't', 0],
+[1402, 'Shartnomalar', 'Xizmat shartnomasini onlayn rasmiylashtiring', 'tar', 'sign', '1 daqiqa', 0, 't', 0],
+[1403, 'Balansni to\'ldirish', 'Hisobingizni onlayn to\'ldiring', 'tar', 'coin', 'Darhol', 0, 't', 0],
+[1404, 'To\'lovlar tarixi', 'Barcha to\'lov va hisob-fakturalaringiz', 'tar', 'form', 'Darhol', 0, 't', 0]
+];
+var S = this.state || {};
+var __favs = S.fav || [];
+var ALL = SX.map(function (r) { return { id: r[0], t: r[1], d: r[2], cat: r[3], catName: CNm[r[3]], icon: __ic(r[4]), time: r[5], soon: r[6] === 1, aud: r[7], pop: r[8] === 1 }; });
+var BYID = {}; ALL.forEach(function (s) { BYID[s.id] = s; });
+var isFav = function (id) { return __favs.indexOf(id) >= 0; };
+var toggleFav = function (id) { var f = (S.fav || []).slice(); var i = f.indexOf(id); if (i >= 0) { f.splice(i, 1); } else { f.push(id); } __me.setState({ fav: f }); };
+var timeStyle = function (s) { var base = 'display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; '; if (s.soon) { return base + 'background: #EEF1F4; color: #4A5763'; } if (s.time === 'Darhol') { return base + 'background: #E7F6EC; color: #157A3B'; } if (s.time.indexOf('ish') >= 0) { return base + 'background: #FFF4DC; color: #8A5A00'; } return base + 'background: var(--p50, #E8F8FB); color: var(--p800, #004E6B)'; };
+var cardOf = function (s) {
+var f = isFav(s.id);
+return { id: s.id, act: s.soon ? 'Tez orada' : (s.time.indexOf('ish') >= 0 ? 'So\'rov yuborish' : (s.time === '3 daqiqa' ? 'Buyurtma berish' : 'Xizmatdan foydalanish')), t: s.t, d: s.d, icon: s.icon, catName: s.catName, time: s.soon ? 'Tez orada' : s.time, timeStyle: timeStyle(s), soon: s.soon, ready: !s.soon,
+favOn: f ? 'true' : 'false', favLabel: f ? 'Sevimlilardan olib tashlash' : 'Sevimlilarga qo\'shish',
+favBtn: 'flex: none; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 10px; background: transparent; cursor: pointer; color: ' + (f ? '#E8A400' : '#7A8794'),
+favSvg: f ? 'fill: #F5B800; stroke: #E8A400' : 'fill: none; stroke: currentColor',
+toggle: function (e) { if (e && e.preventDefault) { e.preventDefault(); } toggleFav(s.id); } };
+};
+var sq = (typeof S.q === 'string' ? S.q : '').trim(), sql = sq.toLowerCase();
+var matchQ = function (s) { return !sql || (s.t + ' ' + s.d + ' ' + s.catName).toLowerCase().indexOf(sql) >= 0; };
+var srchS = { q: typeof S.q === 'string' ? S.q : '', has: !!sq,
+type: function (e) { __me.setState({ q: e.target.value }); },
+submit: function (e) { if (e && e.preventDefault) { e.preventDefault(); } },
+clear: function () { __me.setState({ q: '' }); } };
+var hist = S.hist || ['root'], hi = typeof S.hi === 'number' ? S.hi : 0, loc = hist[hi] || 'root';
+var recS = S.rec || [];
+var isSvc = loc.indexOf('svc:') === 0;
+var svcS = isSvc ? BYID[parseInt(loc.slice(4), 10)] : null;
+var catId = isSvc ? (svcS ? svcS.cat : null) : (loc === 'root' ? null : loc);
+var lvl = loc === 'root' ? 0 : (isSvc ? 2 : 1);
+var LB = function (p) { if (p === 'root') { return 'Xizmatlar'; } if (p.indexOf('svc:') === 0) { var s = BYID[parseInt(p.slice(4), 10)]; return s ? s.t : ''; } return CNm[p] || p; };
+var go = function (p) { var h = hist.slice(0, hi + 1); if (h[h.length - 1] !== p) { h.push(p); } var rec = recS.filter(function (x) { return x !== p; }); if (p !== 'root') { rec.unshift(p); } __me.setState({ hist: h, hi: h.length - 1, rec: rec.slice(0, 6), q: '', fl: null, tab: 'how' }); };
+var backF = function () { if (hi > 0) { __me.setState({ hi: hi - 1, q: '', fl: null, tab: 'how' }); } };
+var fwdF = function () { if (hi < hist.length - 1) { __me.setState({ hi: hi + 1, q: '', fl: null, tab: 'how' }); } };
+var navBtn = function (on) { return 'flex: none; width: 38px; height: 38px; border: 1px solid var(--n200, #E6EEF2); border-radius: 11px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 20px; line-height: 1; cursor: ' + (on ? 'pointer' : 'default') + '; color: ' + (on ? '#1B2530' : '#B4BEC6'); };
+var crumbSt = function (last) { return 'height: 34px; padding: 0 10px; border: 0; border-radius: 9px; font-size: 14px; cursor: pointer; text-align: left; background: ' + (last ? 'var(--p50, #E8F8FB)' : 'transparent') + '; color: ' + (last ? 'var(--p800, #004E6B)' : '#4A5763') + '; font-weight: ' + (last ? '700' : '500'); };
+var crumbIds = lvl === 0 ? ['root'] : lvl === 1 ? ['root', catId] : ['root', catId, loc];
+var nav = { back: backF, fwd: fwdF, up: function () { go('root'); }, backSt: navBtn(hi > 0), fwdSt: navBtn(hi < hist.length - 1), upSt: navBtn(lvl > 0),
+crumbs: crumbIds.map(function (id, i) { var last = i === crumbIds.length - 1; return { t: LB(id), sep: !last, st: crumbSt(last), pick: function () { go(id); } }; }) };
+var recChips = recS.filter(function (p) { return p !== loc; }).slice(0, 4).map(function (p, i) { return { cap: i === 0 ? 'Oldingi' : i === 1 ? 'Undan oldin' : 'Avval', kind: p.indexOf('svc:') === 0 ? 'Xizmat' : 'Soha', t: LB(p), pick: function () { go(p); } }; });
+var favL = ALL.filter(function (s) { return isFav(s.id); });
+var rowOf = function (s) { var c = cardOf(s); c.pick = function () { go('svc:' + s.id); }; return c; };
+var catV = CT.map(function (c) { var it = ALL.filter(function (s) { return s.cat === c[0]; }); var on = catId === c[0]; return { id: c[0], t: c[1], n: it.length, teaser: it.slice(0, 3).map(function (s) { return s.t; }).join(' · '), on: on, pick: function () { go(c[0]); } }; });
+var sibs = CT.map(function (c) { var on = catId === c[0]; return { t: c[1], pick: function () { go(c[0]); }, st: 'flex: none; height: 34px; padding: 0 14px; border-radius: 999px; font-size: 14px; cursor: pointer; white-space: nowrap; border: 1px solid ' + (on ? 'var(--btn, #0077A0)' : 'var(--n200, #E6EEF2)') + '; background: ' + (on ? 'var(--btn, #0077A0)' : '#FFFFFF') + '; color: ' + (on ? '#FFFFFF' : '#1B2530') + '; font-weight: ' + (on ? '600' : '500') }; });
+var svcRows = catId ? ALL.filter(function (s) { return s.cat === catId; }).map(rowOf) : [];
+var hitRows = sq ? ALL.filter(matchQ).map(rowOf) : [];
+var AUD = { f: 'Fuqarolar', t: 'Tadbirkorlar', r: 'Tahlilchilar', d: 'Dasturchilar' };
+var STEPS = { 'Darhol': ['Xizmatni oching', 'Kerakli ma\'lumotni kiriting yoki tanlang', 'Natijani ekranda ko\'ring yoki yuklab oling'], '1 daqiqa': ['Xizmatni oching', 'Ma\'lumotni kiriting (masalan, STIR)', 'Natijani 1 daqiqa ichida oling'], '1–3 ish kuni': ['So\'rovingizni yozing', 'Mutaxassislar ko\'rib chiqadi', 'Javobni 1–3 ish kunida oling'], '3 daqiqa': ['Nashrni tanlang', 'Buyurtmani rasmiylashtiring', 'Elektron nusxani oling'] };
+var detOf = function (s) { var d = s ? cardOf(s) : { t: '', d: '', icon: ICO2.panel, catName: '', time: '', timeStyle: '', favOn: 'false', favLabel: '', favBtn: '', favSvg: '', toggle: function () {}, ready: false, soon: false };
+d.audText = s ? s.aud.split('').map(function (k) { return AUD[k]; }).join(', ') : ''; return d; };
+var det = detOf(svcS);
+var dsteps = svcS ? (STEPS[svcS.time] || STEPS['Darhol']).map(function (t, i) { return { n: i + 1, t: t }; }) : [];
+var dsim = svcS ? ALL.filter(function (s) { return s.cat === svcS.cat && s.id !== svcS.id; }).slice(0, 4).map(function (s) { return { t: s.t, pick: function () { go('svc:' + s.id); } }; }) : [];
+var USER = { name: 'Aziz Karimov', phone: '+998 90 ••• •• 45' };
+var KIND = {}; [101, 102, 103, 104, 105, 106, 901, 902].forEach(function (i) { KIND[i] = 'lookup'; }); [203, 204].forEach(function (i) { KIND[i] = 'report'; }); [501, 503].forEach(function (i) { KIND[i] = 'calc'; }); [403, 404, 1402].forEach(function (i) { KIND[i] = 'request'; }); KIND[1001] = 'order'; KIND[1403] = 'topup'; [1201, 1204].forEach(function (i) { KIND[i] = 'subscribe'; });
+var PRICE = { 403: 150000, 404: 90000, 1001: 45000 };
+var AMT = ['50 000', '100 000', '500 000', '1 000 000'];
+var PAYM = ['Click', 'Payme', 'Uzcard / Humo', 'Hisobdan yechish'];
+var REG = ['Butun O\'zbekiston', 'Toshkent sh.', 'Samarqand v.', 'Farg\'ona v.', 'Andijon v.'];
+var ACT2 = { lookup: 'Tekshirish', report: 'Imzolash va yuborish', calc: 'Hisoblash', data: 'Ko\'rsatish', request: 'Yuborish', subscribe: 'Yoqish', order: 'Buyurtma berish', topup: 'To\'ldirish' };
+var toNum = function (x) { return parseInt(String(x || '').replace(/\D/g, ''), 10) || 0; };
+var priceOf = function (sv, v) { if (!sv) { return 0; } if (KIND[sv.id] === 'topup') { return toNum((v && v.amt) || AMT[0]); } return PRICE[sv.id] || 0; };
+var RESSTEP = { id: 'res', t: 'Natija', d: '', type: 'result' };
+var payStep = function (sv, v) {
+var f = [{ k: 'pay', l: 'To\'lov usuli', opts: PAYM }];
+var m = (v && v.pay) || PAYM[0];
+if (m === 'Uzcard / Humo') { f.push({ k: 'card', l: 'Karta raqami', p: '8600 0000 0000 0000', min: 16 }); f.push({ k: 'exp', l: 'Amal qilish muddati', p: 'OO/YY', min: 4 }); }
+return { id: 'pay', t: 'To\'lov', d: 'Xizmat narxi quyida ko\'rsatilgan.', f: f, hint: 'Namuna rejim: haqiqiy pul yechilmaydi, karta ma\'lumotini kiritmang.', isPay: true };
+};
+var PWAIT = { id: 'paywait', t: 'To\'lov amalga oshirilmoqda', d: 'Sahifani yopmang.', type: 'wait', waitText: 'To\'lov tekshirilmoqda…', checks: ['To\'lov ma\'lumoti tekshirildi', 'Mablag\' ushlab turildi', 'To\'lov tasdiqlandi'], noBack: true };
+var buildSteps = function (sv, v) {
+var kind = KIND[sv.id] || 'data', paid = priceOf(sv, v) > 0;
+if (kind === 'lookup') { return [{ id: 'q', t: 'Korxonani kiriting', d: 'STIR (9 raqam) yoki korxona nomini yozing.', f: [{ k: 'stir', l: 'STIR yoki nomi', p: 'Masalan: 301 234 567' }] }, { id: 'w', t: 'Tekshirilmoqda', d: 'Bir necha soniya kuting.', type: 'wait', waitText: 'Ma\'lumotlar tekshirilmoqda…', checks: ['Davlat reyestri', 'Statistik ma\'lumotlar', 'Hisobotlar holati'] }, RESSTEP]; }
+if (kind === 'report') { return [{ id: 'form', t: 'Hisobot shaklini tanlang', d: 'Korxonangiz uchun kerakli shakl va davr.', f: [{ k: 'form', l: 'Hisobot shakli', opts: ['1-korxona (yillik)', '1-chorak shakli', '4-mehnat (yillik)'] }, { k: 'per', l: 'Davr', opts: ['2026, III chorak', '2026, II chorak'] }] }, { id: 'data', t: 'Ma\'lumotlarni kiriting', d: 'Excel fayl yuklang yoki qo\'lda to\'ldiring.', f: [{ k: 'how', l: 'Qanday kiritasiz', opts: ['Faylni yuklash', 'Qo\'lda to\'ldirish'] }, { k: 'sum', l: 'Asosiy ko\'rsatkich (so\'m)', p: 'Masalan: 1 250 000 000' }] }, { id: 'sign', t: 'Imzolash', d: 'Hisobotni ERI kaliti bilan tasdiqlang.', f: [{ k: 'eri', l: 'ERI kaliti', opts: ['ERI (ID-karta)', 'ERI (fayl)'] }] }, RESSTEP]; }
+if (kind === 'calc') { return [{ id: 'q', t: 'Ma\'lumotlarni kiriting', d: 'Summa va boshlang\'ich yilni tanlang.', f: [{ k: 'sum', l: 'Summa (so\'m)', p: 'Masalan: 1 000 000' }, { k: 'yr', l: 'Qaysi yildan', opts: ['2020', '2022', '2024'] }] }, RESSTEP]; }
+if (kind === 'request') { var a = [{ id: 'q', t: 'So\'rovingiz', d: 'Qanday ma\'lumot kerakligini yozing.', f: [{ k: 'topic', l: 'Mavzu', p: 'Masalan: sanoat ishlab chiqarishi' }, { k: 'text', l: 'Tafsilot', p: 'Davr, hudud, format' }] }]; if (paid) { a.push(payStep(sv, v)); a.push(PWAIT); } a.push(RESSTEP); return a; }
+if (kind === 'order') { return [{ id: 'q', t: 'Nashrni tanlang', d: 'Elektron nusxasi PDF ko\'rinishida yuboriladi.', f: [{ k: 'pub', l: 'Nashr', opts: ['Statistik yilnoma', 'Oylik byulleten', 'Aholi to\'plami'] }] }, payStep(sv, v), PWAIT, RESSTEP]; }
+if (kind === 'topup') { return [{ id: 'q', t: 'Summani tanlang', d: 'Hisobingizga qancha qo\'shmoqchisiz?', f: [{ k: 'amt', l: 'Summa (so\'m)', opts: AMT }] }, payStep(sv, v), PWAIT, RESSTEP]; }
+if (kind === 'subscribe') { return [{ id: 'q', t: 'Nimaga obuna bo\'lasiz', d: 'Mavzu va xabar kanalini tanlang.', f: [{ k: 'topic', l: 'Mavzu', opts: ['Narxlar', 'Aholi', 'Tashqi savdo', 'Mehnat'] }, { k: 'ch', l: 'Qayerga xabar yuborilsin', opts: ['Telegram', 'E-pochta', 'SMS'] }] }, RESSTEP]; }
+return [{ id: 'q', t: 'Nimani ko\'rmoqchisiz', d: 'Hudud va davrni tanlang.', f: [{ k: 'reg', l: 'Hudud', opts: REG }, { k: 'per', l: 'Davr', opts: ['2026, 9 oy', '2025 yil'] }] }, { id: 'fmt', t: 'Qanday ko\'rinishda', d: 'Natijani ekranda ko\'ring yoki yuklab oling.', f: [{ k: 'fmt', l: 'Ko\'rinish', opts: ['Jadval', 'Grafik', 'XLSX yuklab olish'] }] }, RESSTEP];
+};
+var startFlow = function () { if (svcS) { __me.setState({ fl: { id: svcS.id, step: 0, v: {} } }); } };
+if (svcS && KIND[svcS.id] === 'lookup') { dsteps = [{ n: 1, t: 'Korxonaning STIR raqamini yoki nomini kiriting' }, { n: 2, t: 'Natijani ekranda ko\'ring yoki yuklab oling' }]; }
+var FL = S.fl && svcS && !sq && S.fl.id === svcS.id ? S.fl : null;
+if (svcS) { var p0 = priceOf(svcS, {}); var tarif = !p0 && KIND[svcS.id] !== 'topup'; det.priceText = KIND[svcS.id] === 'topup' ? 'Siz tanlagan summa' : (p0 ? fmt(p0) + ' so\'m' : 'Tarif paketi bo\'yicha'); det.priceSt = 'font-size: 14px; font-weight: 700; color: ' + (p0 || KIND[svcS.id] === 'topup' ? '#9A5B00' : 'var(--p800, #004E6B)'); det.note = tarif ? 'Tarif paketi bo\'yicha (limitdan yechiladi)' : ''; }
+var flv = { open: false, svcName: '', icon: ICO2.panel, catName: '', timeT: '', stepNo: 0, stepN: 0, title: '', desc: '', hint: '', fields: [], hasFields: false, isWait: false, isResult: false, waitText: '', checks: [], res: { title: '', lines: [], note: '' }, canNext: false, nextLabel: '', nextSt: '', hasBack: false, back: function () {}, close: function () {}, next: function () {}, kd: function () {}, steps: [], tl: [], hasHint: false, hasPay: false, payLines: [], payTotal: '', isPaid: false, priceT: '', priceSt: '', userName: USER.name, userPhone: USER.phone, resPaid: false };
+if (FL) {
+var sv = svcS, kind = KIND[sv.id] || 'data', vals = FL.v || {};
+var stp = buildSteps(sv, vals);
+var si = Math.max(0, Math.min(stp.length - 1, FL.step || 0)), cs = stp[si];
+var getV = function (f) { return vals[f.k] !== undefined ? vals[f.k] : (f.opts ? f.opts[0] : ''); };
+var setV = function (k, val) { var nv = Object.assign({}, vals); nv[k] = val; __me.setState({ fl: { id: FL.id, step: si, v: nv } }); };
+var chip = function (on) { return 'height: 50px; padding: 0 22px; border-radius: 14px; font-size: 16.5px; cursor: pointer; border: 1px solid ' + (on ? 'var(--btn, #0077A0)' : 'var(--n300, #D3DEE4)') + '; background: ' + (on ? 'var(--p50, #E8F8FB)' : '#FFFFFF') + '; color: ' + (on ? 'var(--p800, #004E6B)' : '#1B2530') + '; font-weight: ' + (on ? '700' : '500'); };
+var ok = function (s) { return (s.f || []).every(function (f) { return f.opts || String(getV(f)).trim().length >= (f.min || 1); }); };
+var canNext = ok(cs), last = si === stp.length - 1;
+var price = priceOf(sv, vals), paid = price > 0;
+var goTo = function (n) { __me.setState({ fl: { id: FL.id, step: n, v: vals } }); };
+var next = function () { if (last) { __me.setState({ fl: null }); } else if (canNext) { goTo(si + 1); } };
+var num = toNum(vals.sum);
+var fac = { '2020': 1.62, '2022': 1.34, '2024': 1.12 }[getV({ k: 'yr', opts: ['2020'] })] || 1.2;
+var payM = getV({ k: 'pay', opts: [PAYM[0]] });
+var chek = 'CH-' + (700000 + sv.id * 7);
+var res = { title: 'Natija tayyor', lines: [], note: 'Namuna natija. Haqiqiy ma\'lumot xizmat ishga tushganda chiqadi.' };
+var payLine = paid ? [{ k: 'To\'langan', v: fmt(price) + ' so\'m (' + payM + ')' }, { k: 'Chek', v: chek }] : [];
+if (cs.type === 'result') {
+if (kind === 'lookup') { res = { title: 'Korxona topildi', lines: [{ k: 'Nomi', v: '«Namuna Savdo» MChJ' }, { k: 'STIR', v: String(vals.stir || '301 234 567') }, { k: 'Holat', v: 'Faol' }, { k: 'Umumiy ball', v: '82 / 100' }, { k: 'Tarif limiti', v: '1 ta yechildi (qoldi: 9 / 10)' }], note: res.note }; }
+else if (kind === 'report') { res = { title: 'Hisobot qabul qilindi', lines: [{ k: 'Hisobot', v: getV({ k: 'form', opts: ['1-korxona (yillik)'] }) }, { k: 'Davr', v: getV({ k: 'per', opts: ['2026, III chorak'] }) }, { k: 'Raqami', v: 'HS-2026-0' + sv.id }, { k: 'Holat', v: 'Tekshiruvda' }], note: res.note }; }
+else if (kind === 'calc') { res = { title: 'Hisob tayyor', lines: [{ k: 'Boshlang\'ich summa', v: fmt(num) + ' so\'m' }, { k: 'Bugungi qiymati', v: fmt(num * fac) + ' so\'m' }, { k: 'O\'zgarish', v: '+' + Math.round((fac - 1) * 100) + '%' }], note: res.note }; }
+else if (kind === 'request') { res = { title: 'So\'rov yuborildi', lines: [{ k: 'Raqami', v: 'ST-2026-' + (4000 + sv.id) }, { k: 'Mavzu', v: String(vals.topic || '—') }, { k: 'Muddat', v: sv.time }].concat(payLine), note: res.note }; }
+else if (kind === 'order') { res = { title: 'Buyurtma qabul qilindi', lines: [{ k: 'Nashr', v: getV({ k: 'pub', opts: ['Statistik yilnoma'] }) }, { k: 'Format', v: 'PDF, elektron pochtaga' }, { k: 'Buyurtma', v: 'BN-2026-' + (3000 + sv.id) }].concat(payLine), note: res.note }; }
+else if (kind === 'topup') { res = { title: 'Hisob to\'ldirildi', lines: [{ k: 'Qo\'shildi', v: fmt(price) + ' so\'m' }, { k: 'Usul', v: payM }, { k: 'Chek', v: chek }], note: res.note }; }
+else if (kind === 'subscribe') { res = { title: 'Obuna yoqildi', lines: [{ k: 'Mavzu', v: getV({ k: 'topic', opts: ['Narxlar'] }) }, { k: 'Kanal', v: getV({ k: 'ch', opts: ['Telegram'] }) }], note: res.note }; }
+else { res = { title: 'Ma\'lumot tayyor', lines: [{ k: 'Hudud', v: getV({ k: 'reg', opts: [REG[0]] }) }, { k: 'Davr', v: getV({ k: 'per', opts: ['2026, 9 oy'] }) }, { k: 'Ko\'rinish', v: getV({ k: 'fmt', opts: ['Jadval'] }) }], note: res.note }; }
+}
+var sumOf = function (s) { return (s.f || []).map(function (f) { return String(getV(f)); }).filter(function (x) { return x; }).join(' · '); };
+var nx = stp[si + 1];
+var nextLabel = last ? 'Yopish' : (cs.isPay ? 'To\'lash ' + fmt(price) + ' so\'m' : (cs.type === 'wait' ? 'Natijani ko\'rish' : (nx && nx.type === 'result' ? (paid && cs.id !== 'paywait' ? 'Yuborish' : (cs.id === 'paywait' ? 'Natijani ko\'rish' : ACT2[kind])) : 'Davom etish')));
+flv = { open: true, userName: USER.name, userPhone: USER.phone, svcName: sv.t, icon: sv.icon, catName: sv.catName, timeT: sv.time, stepNo: si + 1, stepN: stp.length, title: cs.t, desc: cs.d || '', hint: cs.hint || '', hasHint: !!cs.hint,
+fields: (cs.f || []).map(function (f) { var v = getV(f); return { k: f.k, l: f.l, p: f.p || '', val: v, isInput: !f.opts, isSelect: !!f.opts, set: function (e) { setV(f.k, e.target.value); }, opts: (f.opts || []).map(function (o) { return { t: o, st: chip(v === o), pick: function () { setV(f.k, o); } }; }) }; }),
+hasFields: !!(cs.f && cs.f.length), isWait: cs.type === 'wait', waitText: cs.waitText || '', isResult: cs.type === 'result', checks: (cs.checks || []).map(function (t) { return { t: t }; }), res: res,
+hasPay: !!cs.isPay, payLines: [{ k: 'Xizmat', v: sv.t }, { k: 'Narxi', v: fmt(price) + ' so\'m' }, { k: 'Shundan QQS (12%)', v: fmt(Math.round(price * 12 / 112)) + ' so\'m' }], payTotal: fmt(price) + ' so\'m',
+isPaid: paid, priceT: paid ? fmt(price) + ' so\'m' : 'Bepul', priceSt: 'flex: none; height: 24px; padding: 0 10px; border-radius: 999px; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; ' + (paid ? 'background: #FFF3DC; color: #9A5B00' : 'background: #E7F6EC; color: #157A3B'),
+resPaid: cs.type === 'result' && paid,
+canNext: canNext, nextLabel: nextLabel,
+nextSt: 'height: 56px; padding: 0 30px; border: 0; border-radius: 16px; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; cursor: ' + (canNext ? 'pointer' : 'default') + '; background: ' + (canNext ? 'var(--btn, #0077A0)' : '#C9D4DB') + '; color: #FFFFFF',
+hasBack: si > 0 && !last && !cs.noBack, back: function () { if (si > 0) { goTo(si - 1); } }, close: function () { __me.setState({ fl: null }); }, next: next,
+kd: function (e) { if (e && e.key === 'Enter') { if (e.preventDefault) { e.preventDefault(); } next(); } },
+steps: stp.map(function (s, i) { var done = i < si, cur = i === si; return { n: done ? '✓' : String(i + 1), t: s.t, done: done, cur: cur,
+numSt: 'flex: none; width: 36px; height: 36px; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-size: 14.5px; font-weight: 700; ' + (cur ? 'background: #FFFFFF; color: var(--p800, #004E6B)' : (done ? 'background: rgba(255,255,255,0.35); color: #FFFFFF' : 'background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.75)')),
+lineSt: 'flex: 1; min-width: 10px; height: 3px; border-radius: 2px; background: ' + (done ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)') }; }),
+tl: [{ t: paid ? 'To\'lov va ariza qabul qilindi' : 'Ariza qabul qilindi', d: 'Hozir', st: 'done' }, { t: 'Ko\'rib chiqilmoqda', d: sv.time, st: 'cur' }, { t: 'Natija tayyor', d: 'Sizga xabar beramiz', st: 'next' }].map(function (x) { return { t: x.t, d: x.d, dot: 'flex: none; width: 14px; height: 14px; border-radius: 999px; margin-top: 4px; ' + (x.st === 'done' ? 'background: #1EB53A' : x.st === 'cur' ? 'background: var(--btn, #0077A0); box-shadow: 0 0 0 4px var(--p100, #D4F1F7)' : 'background: var(--n200, #E6EEF2)') }; }),
+hasTl: cs.type === 'result' && (kind === 'request' || kind === 'order' || kind === 'report') };
+}
+
+var TABS = [['how', 'Qanday ishlaydi'], ['docs', 'Hujjatlar va huquqiy asos'], ['contact', 'Aloqa'], ['stat', 'Statistika va baholar']];
+var tabId = S.tab || 'how', perId = S.per || 'all';
+var PERS = [['all', 'Barcha'], ['year', 'Yil'], ['month', 'Oy']];
+var rnd = function (n) { var x = Math.sin(n * 9301 + 49297) * 233280; return x - Math.floor(x); };
+var dx = { tabs: TABS.map(function (x) { var on = tabId === x[0]; return { t: x[1], pick: function () { __me.setState({ tab: x[0] }); }, st: 'flex: none; height: 44px; padding: 0 16px; border: 0; border-bottom: 3px solid ' + (on ? 'var(--btn, #0077A0)' : 'transparent') + '; background: transparent; font-size: 14.5px; cursor: pointer; white-space: nowrap; color: ' + (on ? 'var(--p800, #004E6B)' : '#4A5763') + '; font-weight: ' + (on ? '700' : '500') }; }), tHow: tabId === 'how', tDocs: tabId === 'docs', tContact: tabId === 'contact', tStat: tabId === 'stat', usage: '', rate: '', rateN: '', stars: '', docs: [], legal: '', bars: [], reviews: [], who: [], phone: '', email: '', priceFull: '', pers: [], chart: [], since: '', stats: [] };
+if (svcS) {
+var sid = svcS.id, kd = KIND[sid] || 'data';
+var rt = 3.9 + ((sid * 7) % 11) / 10, rn = 40 + (sid * 11) % 200;
+var uTot = sid === 101 ? 557 : 120 + (sid * 37) % 900;
+dx.usage = fmt(uTot); dx.rate = rt.toFixed(2); dx.rateN = String(rn);
+dx.stars = '★★★★★'.slice(0, Math.round(rt)) + '☆☆☆☆☆'.slice(0, 5 - Math.round(rt));
+dx.docs = ({ report: ['ERI kaliti'], request: ['So\'rov matni: mavzu, davr, hudud'], order: ['Nashr nomi'] }[kd] || []).map(function (x) { return { t: x }; });
+dx.noDocs = dx.docs.length === 0;
+dx.legal = 'O\'zbekiston Respublikasining "Rasmiy statistika to\'g\'risida"gi Qonuni';
+dx.priceFull = PRICE[sid] ? fmt(PRICE[sid]) + ' so\'m (QQS 12% ichida). To\'lov xizmatdan foydalanish jarayonida amalga oshiriladi.' : (kd === 'topup' ? 'Siz tanlagan summa hisobingizga qo\'shiladi.' : 'Tarif paketi limitidan: 1-tarif — 10, 2-tarif — 100, 3-tarif — 1 000, 4-tarif — 10 000 korxona');
+dx.isTarif = !PRICE[sid] && kd !== 'topup'; dx.isMoney = !dx.isTarif; dx.moneyBig = PRICE[sid] ? fmt(PRICE[sid]) + ' so\'m' : 'Summani o\'zingiz tanlaysiz'; dx.moneyNote = PRICE[sid] ? 'QQS 12% ichida. To\'lov xizmatdan foydalanish jarayonida amalga oshiriladi.' : 'Tanlangan summa hisobingizga qo\'shiladi.';
+dx.tarifs = [['1-tarif', 10], ['2-tarif', 100], ['3-tarif', 1000], ['4-tarif', 10000]].map(function (x) { return { n: x[0], v: fmt(x[1]), w: 'width: ' + Math.round(Math.log(x[1]) / Math.log(10000) * 100) + '%' }; });
+dx.since = 'xizmat ishga tushirilganidan beri (2025-05-14)';
+var w5 = 55 + (sid * 3) % 20, w4 = 15 + (sid * 5) % 8, w3 = 6 + (sid * 7) % 6, w2 = 3, w1 = 4 + (sid * 11) % 5;
+dx.bars = [[5, w5], [4, w4], [3, w3], [2, w2], [1, w1]].map(function (b) { return { n: b[0], pct: b[1] + '%', st: 'height: 100%; border-radius: 999px; background: #F0B72F; width: ' + b[1] + '%' }; });
+dx.reviews = [{ who: 'Dilshod A.', st: '★★★★★', t: 'Tez va tushunarli ishladi, natijani bir daqiqada oldim.' }, { who: 'Madina R.', st: '★★★★☆', t: 'Qulay. Natijani PDF qilib yuklab olish imkoni ham bo\'lsa yaxshi bo\'lardi.' }];
+dx.who = svcS.aud.split('').map(function (k) { return { t: AUD[k] }; });
+dx.phone = '+998 71 233-45-67'; dx.email = 'info@stat.uz';
+dx.pers = PERS.map(function (x) { var on = perId === x[0]; return { t: x[1], pick: function () { __me.setState({ per: x[0] }); }, st: 'height: 32px; padding: 0 14px; border-radius: 999px; font-size: 14px; cursor: pointer; border: 1px solid var(--btn, #0077A0); background: ' + (on ? 'var(--btn, #0077A0)' : '#FFFFFF') + '; color: ' + (on ? '#FFFFFF' : 'var(--p800, #004E6B)') }; });
+var MN = ['11', '12', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11'];
+var cnt = perId === 'month' ? 30 : (perId === 'year' ? 12 : 13);
+var lab = function (i) { return perId === 'month' ? String(i + 1) : (perId === 'year' ? MN[i + 1] : MN[i]); };
+var per = uTot / cnt, vals2 = [], mx = 1;
+for (var bi = 0; bi < cnt; bi++) { var vv = per * (0.55 + 0.9 * rnd(sid * 31 + bi)); if (bi === cnt - 1 && perId !== 'month') { vv = per * 0.2; } vals2.push(vv); if (vv > mx) { mx = vv; } }
+dx.chart = vals2.map(function (v, bi) { return { l: perId === 'month' && bi % 3 !== 0 ? '' : lab(bi), n: String(Math.round(v)), st: 'width: 100%; border-radius: 6px 6px 0 0; background: var(--btn, #0077A0); opacity: .9; height: ' + Math.max(4, Math.round(v / mx * 120)) + 'px' }; });
+}
+
+return {
+themeVars: __vars, palGroups: __groups, palUi: __palUi, clock: clock, srch: srchS, total: ALL.length,
+showSearch: !!sq, showL0: !sq && lvl === 0, showL1: !sq && lvl === 1, showL2: !sq && lvl === 2 && !!svcS && !flv.open,
+aStrip: !sq && lvl >= 1, bStrip: !sq && lvl === 2, aText: catId ? CNm[catId] : '', bText: catId ? 'Xizmatlar' : '',
+toRoot: function () { go('root'); }, toCat: function () { go(catId); },
+hitRows: hitRows, hitN: hitRows.length, hitNone: hitRows.length === 0,
+cats: catV, catName: catId ? CNm[catId] : '', sibs: sibs, svcRows: svcRows,
+det: det, dsteps: dsteps, dsim: dsim, hasSim: dsim.length > 0,
+recChips: recChips, hasRec: recChips.length > 0,
+fl: flv, dx: dx, ico: ICO2, startFlow: startFlow, canStart: !flv.open, colDisp: flv.open ? "none" : "flex"
+};
+}
+}
+</script>
+</body>
+</html>

@@ -143,6 +143,7 @@ function AppRoutes() {
           <Route path="/all-services" element={<Navigate to="/spheres" replace />} />
           <Route path="/spheres" element={<Spheres />} />
           <Route path="/spheres/:id" element={<Spheres />} />
+          <Route path="/spheres/:id/:number" element={<Spheres />} />
           <Route path="/service/:number" element={<ServicePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/popular" element={<Popular />} />

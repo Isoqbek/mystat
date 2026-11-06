@@ -13,7 +13,7 @@ const listeners = new Set<() => void>();
  * MG-07: "Tanlanganlarga qo'shish" — xizmat sevimlilarga (FQ-04 modeli, kind="service", params={number}).
  * `variant="icon"` — kartochkadagi yulduzcha, `"button"` — pasportdagi tugma. Mehmonni login'ga yuboradi.
  */
-export default function FavoriteServiceButton({ number, title, variant = "icon" }: { number: number; title: string; variant?: "icon" | "button" }) {
+export default function FavoriteServiceButton({ number, title, variant = "icon", buttonClass = "h-[42px] gap-2 px-4 text-sm" }: { number: number; title: string; variant?: "icon" | "button"; buttonClass?: string }) {
   const { isAuthenticated } = useAuth();
   const { t } = useLang();
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ export default function FavoriteServiceButton({ number, title, variant = "icon" 
   if (variant === "button") {
     return (
       <button type="button" onClick={toggle} disabled={busy} aria-pressed={!!fav}
-        className="inline-flex h-[42px] items-center gap-2 rounded-mg bg-white px-4 text-sm font-semibold text-black shadow-sm hover:bg-slate-50">
+        className={`inline-flex items-center rounded-mg bg-white font-semibold text-black shadow-sm hover:bg-slate-50 ${buttonClass}`}>
         <Star className={`h-5 w-5 ${fav ? "fill-amber-400 text-amber-400" : ""}`} aria-hidden="true" />{label}
       </button>
     );

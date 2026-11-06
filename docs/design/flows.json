@@ -1,0 +1,152 @@
+{
+  "_note": "2-bosqich: xizmat jarayoni. N2 ichida o'ng yon oyna (440px). Namuna matnlar va narxlar, haqiqiylari bilan almashtiring.",
+  "container": {
+    "type": "collapsedColumns",
+    "where": "N2 oynasi ichida: soha ustuni, xizmatlar ustuni va xizmat nomi ingichka vertikal ustunlarga siqiladi, jarayon qolgan butun kenglikni egallaydi",
+    "opensWhen": "tafsilotdagi asosiy tugma bosilganda",
+    "closesWhen": [
+      "xizmat nomi ustunini bosish (tafsilotga qaytadi)",
+      "boshqa soha/xizmatga o'tilganda",
+      "oxirgi qadamda 'Yopish'"
+    ],
+    "header": [
+      "gradient sarlavha (tafsilot bilan bir xil): oq ikonka, xizmat nomi, yopish tugmasi",
+      "tasdiqlangan foydalanuvchi belgisi (ism va telefon)",
+      "'Qadam N / M' va oq raqamli qadamlar chizig'i"
+    ],
+    "stepper": "raqamli doirachalar + chiziq, 'Qadam N / M'",
+    "footer": "Orqaga (kerak bo'lsa) va asosiy tugma",
+    "identityRow": "Shaxs tasdiqlash qadami YO'Q. Foydalanuvchi ro'yxatdan o'tgan, sarlavhada ism va telefon bilan tasdiqlangan belgisi turadi."
+  },
+  "stepTypes": {
+    "form": "maydonlar: matn kiritish yoki chip tanlash",
+    "pay": "to'lov usuli + narx jadvali (xizmat narxi, QQS 12% ichida, jami). 'Uzcard / Humo' tanlansa karta raqami va muddat maydonlari chiqadi",
+    "wait": "spinner + tekshiruv ro'yxati, tugma bilan davom etiladi",
+    "result": "natija sarlavhasi + qatorlar; pulli bo'lsa 'To'langan' va 'Chek' qatorlari; ariza turlarida holat chizig'i"
+  },
+  "kinds": {
+    "lookup": {
+      "steps": [
+        "form",
+        "wait",
+        "result"
+      ],
+      "serviceIds": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        901,
+        902
+      ]
+    },
+    "report": {
+      "steps": [
+        "form",
+        "form",
+        "form(ERI)",
+        "result"
+      ],
+      "serviceIds": [
+        203,
+        204
+      ]
+    },
+    "calc": {
+      "steps": [
+        "form",
+        "result"
+      ],
+      "serviceIds": [
+        501,
+        503
+      ]
+    },
+    "request": {
+      "steps": [
+        "form",
+        "pay?",
+        "paywait?",
+        "result"
+      ],
+      "serviceIds": [
+        403,
+        404,
+        1402
+      ],
+      "paid": {
+        "403": 150000,
+        "404": 90000
+      }
+    },
+    "order": {
+      "steps": [
+        "form",
+        "pay",
+        "paywait",
+        "result"
+      ],
+      "serviceIds": [
+        1001
+      ],
+      "price": 45000
+    },
+    "topup": {
+      "steps": [
+        "form(summa)",
+        "pay",
+        "paywait",
+        "result"
+      ],
+      "serviceIds": [
+        1403
+      ],
+      "amounts": [
+        50000,
+        100000,
+        500000,
+        1000000
+      ]
+    },
+    "subscribe": {
+      "steps": [
+        "form",
+        "result"
+      ],
+      "serviceIds": [
+        1201,
+        1204
+      ]
+    },
+    "data": {
+      "steps": [
+        "form",
+        "form",
+        "result"
+      ],
+      "serviceIds": "boshqa hammasi"
+    }
+  },
+  "buttonLabels": {
+    "lookup": "Tekshirish",
+    "report": "Imzolash va yuborish",
+    "calc": "Hisoblash",
+    "data": "Ko'rsatish",
+    "request": "Yuborish",
+    "subscribe": "Yoqish",
+    "order": "Buyurtma berish",
+    "topup": "To'ldirish",
+    "pay": "To'lash <summa> so'm",
+    "wait": "Natijani ko'rish",
+    "next": "Davom etish",
+    "last": "Yopish"
+  },
+  "rules": [
+    "'Boshlash' so'zi ishlatilmaydi",
+    "To'lov bosqichida 'Orqaga' yo'q (qayta to'lov xavfi)",
+    "Haqiqiy to'lov integratsiyasi (Click/Payme/Uzcard) backend ishi, UI faqat natijani ko'rsatadi",
+    "Joriy qadam va kiritilgan qiymatlar komponent holatida saqlanadi, URL'ga yozilmaydi"
+  ]
+}

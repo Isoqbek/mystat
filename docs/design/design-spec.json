@@ -1,0 +1,173 @@
+{
+  "_about": "N2 dizayn spetsifikatsiyasi. Claude Code uchun mashina o'qiydigan tavsif. Ko'rinish namunasi: N2.dc.html (canvas formati, brauzerda ochilmaydi).",
+  "task": {
+    "goal": "Mavjud /spheres sahifasining ko'rinishini N2 dizayniga o'tkazish.",
+    "scope": "Faqat frontend (komponent va stil).",
+    "doNotTouch": [
+      "backend",
+      "API chaqiruvlari",
+      "state/store/servislar",
+      "ma'lumot turlari",
+      "marshrutlash (zarurat bo'lsa avval so'ra)"
+    ],
+    "keep": [
+      "mavjud komponent nomlari va props'lari",
+      "haqiqiy ma'lumot manbai (demo ma'lumotlar HANDOFF.md faqat namuna)"
+    ],
+    "language": "UI matnlari o'zbek tilida"
+  },
+  "page": {
+    "title": "Xizmatlar",
+    "subtitle": "{N} ta xizmat, {M} ta sohada",
+    "structure": [
+      "hero: gradient fon, sarlavha, qidiruv maydoni (oq, yumaloq burchak)",
+      "tezkor o'tish: oxirgi ko'rilgan joylar (Oldingi / Undan oldin / Avval) tugmalari",
+      "asosiy karta: chapdan o'ngga ustunlar (soha ro'yxati, xizmatlar ro'yxati, tafsilot)"
+    ]
+  },
+  "levels": [
+    {
+      "level": 0,
+      "name": "Sohalar",
+      "show": "Soha kartochkalari to'ri (auto-fill, min 260px): nom + 'N ta xizmat' + o'ng chevron.",
+      "onClick": "soha tanlanadi -> level 1"
+    },
+    {
+      "level": 1,
+      "name": "Soha ichidagi xizmatlar",
+      "show": [
+        "soha nomi + 'N ta xizmat'",
+        "boshqa sohalar tugmalari (gorizontal scroll, joriysi to'q rangda)",
+        "xizmat qatorlari: ikonka, nom, 2 qatorlik tavsif, muddat belgisi, sevimli yulduzcha, '›'"
+      ],
+      "layout": "soha ro'yxati chapga 66px ingichka vertikal ustun bo'lib siqiladi: '‹' belgisi + soha nomi vertikal yozuv; ustun bosilsa level 0 ga qaytadi",
+      "onClick": "xizmat qatori -> level 2"
+    },
+    {
+      "level": 2,
+      "name": "Xizmat tafsiloti",
+      "show": [
+        "katta ikonka, soha nomi, xizmat nomi (26px, 800)",
+        "tavsif (17px)",
+        "Natija muddati belgisi va 'Kimlar uchun' (auditoriya)",
+        "'Qanday ishlaydi' 3 qadam",
+        "asosiy tugma (matni xizmat turiga qarab)",
+        "'Shu sohada yana' tugmalari (o'xshash xizmatlar)",
+        "comingSoon bo'lsa tugma o'rniga 'Tez orada' xabari"
+      ],
+      "layout": "soha va xizmatlar ustunlari ikkalasi ham 66px vertikal ustun bo'lib siqiladi; ular bosilsa tegishli darajaga qaytadi"
+    }
+  ],
+  "navigation": {
+    "principle": "Joylashuv URL'da bo'lsin (router). Brauzer orqaga/oldinga ishlashi kerak.",
+    "routes": [
+      "/spheres",
+      "/spheres/:sohaId",
+      "/spheres/:sohaId/:xizmatId"
+    ],
+    "breadcrumbs": "Dizaynda alohida ko'rinmaydi, siqilgan ustunlar yo'l vazifasini bajaradi",
+    "recents": "Oxirgi 4 ta ko'rilgan joy (soha yoki xizmat). Birinchisi 'Oldingi', ikkinchisi 'Undan oldin', qolganlari 'Avval'. Bosilsa o'sha joyga o'tadi.",
+    "animation": "daraja almashganda kontent o'ngdan 18px siljib paydo bo'ladi, 0.22s; prefers-reduced-motion bo'lsa o'chadi"
+  },
+  "search": {
+    "behavior": "Matn kiritilganda darajadan qat'i nazar natijalar ro'yxati chiqadi: 'Qidiruv natijalari' + '\"matn\" bo'yicha N ta xizmat'. Qidiruv nom, tavsif va soha nomi bo'yicha, katta-kichik harfga e'tiborsiz. Natija bosilsa tafsilotga o'tadi.",
+    "empty": "Hech narsa topilmadi."
+  },
+  "favorites": {
+    "ui": "Xizmat qatorida yulduzcha tugmasi. Yoqilganda sariq (#F5B800), aria-pressed ishlatiladi.",
+    "note": "Hozirgi loyihada sevimlilar bo'lsa, mavjud mexanizmni ishlat. Bo'lmasa so'rab ol."
+  },
+  "timeBadge": {
+    "Darhol": "yashil: fon #E7F6EC, matn #157A3B",
+    "1 daqiqa/3 daqiqa": "fon var(--p50), matn var(--p800)",
+    "1–3 ish kuni": "sariq: fon #FFF4DC, matn #8A5A00",
+    "Tez orada": "kulrang: fon #EEF1F4, matn #4A5763"
+  },
+  "actionButtonLabel": {
+    "rule": "Darhol va 1 daqiqa -> 'Xizmatdan foydalanish'; ish kuni -> 'So'rov yuborish'; 3 daqiqa -> 'Buyurtma berish'; comingSoon -> 'Tez orada' (tugma faolsiz)",
+    "note": "'Boshlash' so'zi ishlatilmaydi."
+  },
+  "audienceLabels": {
+    "f": "Fuqarolar",
+    "t": "Tadbirkorlar",
+    "r": "Tahlilchilar",
+    "d": "Dasturchilar"
+  },
+  "howItWorksSteps": {
+    "Darhol": [
+      "Xizmatni oching",
+      "Kerakli ma'lumotni kiriting yoki tanlang",
+      "Natijani ekranda ko'ring yoki yuklab oling"
+    ],
+    "1 daqiqa": [
+      "Xizmatni oching",
+      "Ma'lumotni kiriting (masalan, STIR)",
+      "Natijani 1 daqiqa ichida oling"
+    ],
+    "1–3 ish kuni": [
+      "So'rovingizni yozing",
+      "Mutaxassislar ko'rib chiqadi",
+      "Javobni 1–3 ish kunida oling"
+    ],
+    "3 daqiqa": [
+      "Nashrni tanlang",
+      "Buyurtmani rasmiylashtiring",
+      "Elektron nusxani oling"
+    ],
+    "note": "Namuna matnlar, jamoa tekshirishi kerak"
+  },
+  "tokens": {
+    "fontFamily": "Onest (Google Fonts), 400/500/600/700/800",
+    "monoFont": "IBM Plex Mono",
+    "colors": {
+      "btn": "#0077A0",
+      "p700": "#00668A",
+      "p800": "#004E6B",
+      "accent": "#0099B5",
+      "p50": "#E8F8FB",
+      "p100": "#D4F1F7",
+      "p200": "#A6E1EE",
+      "p300": "#6CCBE0",
+      "p400": "#33B6D1",
+      "n50": "#FAFCFD",
+      "n100": "#F2F7F9",
+      "n200": "#E6EEF2",
+      "n300": "#D3DEE4",
+      "name": "Bayroq ko'ki",
+      "cat": "Asosiy",
+      "key": "bayroq"
+    },
+    "neutral": {
+      "text": "#1B2530",
+      "muted": "#4A5763",
+      "subtle": "#6B7885",
+      "pageBg": "#F3F6F8",
+      "cardBg": "#FFFFFF"
+    },
+    "gradient": "linear-gradient(160deg, var(--p800) 0%, var(--btn) 58%, var(--accent) 100%) + radial-gradient(90% 80% at 100% 0%, rgba(255,255,255,0.20), transparent 60%)",
+    "radius": {
+      "card": "22px",
+      "row": "12-16px",
+      "button": "14px",
+      "pill": "999px"
+    },
+    "note": "Ranglarni CSS o'zgaruvchilari qilib e'lon qil (--btn, --p50, ...). Palitra tanlash paneli ishlab chiqarishga kirmaydi, bitta palitra qoladi."
+  },
+  "accessibility": [
+    "tugmalar <button>, havolalar <a>",
+    "tanlangan holat aria-pressed / aria-selected",
+    "siqilgan ustunlarda aria-label (masalan 'Sohalar ro'yxatiga qaytish')",
+    "fokus ko'rinishi saqlansin"
+  ],
+  "responsive": "Ekran tor bo'lsa ustunlar flex-wrap bilan pastga tushadi, sohalar to'ri auto-fill bilan moslashadi.",
+  "dataContract": {
+    "service": "{ id, name, description, category, time, comingSoon, audience[], popular }",
+    "category": "{ id, name }",
+    "note": "HANDOFF.md va categories demo uchun. Haqiqiy maydon nomlari loyihadagi API'ga moslansin (mapper yoz)."
+  },
+  "openQuestions": [
+    "8 ta xizmat (1301-1304, 1401-1404) nomi va tavsifi taxminiy",
+    "tavsif va 'Qanday ishlaydi' matnlarini jamoa tasdiqlashi kerak",
+    "iconKey ga mos ikonka to'plami (loyihada qaysi ikonka kutubxonasi bor)"
+  ]
+}

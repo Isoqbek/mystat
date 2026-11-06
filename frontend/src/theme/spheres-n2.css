@@ -1,0 +1,73 @@
+/*
+ * /spheres — N2 dizayni (soha → xizmat → tafsilot). Manba: docs/design/design-spec.json.
+ * Ranglar `.pp` (passport.css) tokenlaridan olinadi: --btn, --p50…--p800, --pacc va --pp-* (tungi rejim ishlaydi).
+ * Yangi rang faqat holat belgilari uchun (yashil/sariq/kulrang) va sevimli yulduzcha (#F5B800).
+ */
+.sn2 {
+  --sn-line: var(--pp-line);
+  --sn-soft: var(--pp-soft);
+  --sn-card: var(--pp-card);
+  --sn-muted: var(--pp-muted);
+  --sn-g1: var(--p800); --sn-g2: var(--btn); --sn-g3: var(--pacc);
+  --sn-ok-bg: #e7f6ec; --sn-ok-fg: #157a3b;
+  --sn-warn-bg: #fff4dc; --sn-warn-fg: #8a5a00;
+  --sn-gray-bg: #eef1f4; --sn-gray-fg: #4a5763;
+  --sn-fav: #f5b800;
+}
+.dark .sn2, [data-theme="dark"] .sn2 {
+  --sn-g1: #004e6b; --sn-g2: #0077a0; --sn-g3: #0099b5;
+  --sn-ok-bg: rgb(30 181 58 / .16); --sn-ok-fg: #6fd58b;
+  --sn-warn-bg: rgb(245 184 0 / .16); --sn-warn-fg: #f2c75c;
+  --sn-gray-bg: rgb(148 163 184 / .16); --sn-gray-fg: #b4c0cc;
+}
+
+/* hero */
+.sn2-hero {
+  background:
+    radial-gradient(90% 80% at 100% 0%, rgb(255 255 255 / .20) 0%, rgb(255 255 255 / 0) 60%),
+    linear-gradient(160deg, var(--sn-g1) 0%, var(--sn-g2) 58%, var(--sn-g3) 100%);
+  color: #fff;
+}
+.sn2-sbox { transition: box-shadow .15s ease; }
+.sn2-sbox:focus-within { box-shadow: 0 0 0 4px rgb(255 255 255 / .28); }
+.sn2-sbox input:focus { outline: none; }
+.sn2-sbox input::placeholder { color: #6b7885; }
+
+/* asosiy karta */
+.sn2-panel {
+  display: flex; align-items: stretch; overflow: hidden; min-height: 660px;
+  border-radius: 22px; background: var(--sn-card); border: 1px solid var(--sn-line);
+  box-shadow: 0 24px 48px -36px rgb(16 40 60 / .5);
+}
+
+/* Level 0: soha kartochkalari */
+.sn2-sk { transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+.sn2-sk:hover, .sn2-sk:focus-visible { transform: translateY(-2px); box-shadow: 0 12px 28px rgb(16 40 60 / .10); border-color: var(--p200); text-decoration: none; }
+.sn2-sk:hover .sn2-go, .sn2-sk:focus-visible .sn2-go { opacity: 1; transform: none; }
+.sn2-go { opacity: .55; transform: translateX(-3px); transition: all .15s ease; }
+
+/* xizmat qatori, tezkor o'tish tugmalari */
+.sn2-row { transition: background .12s ease; }
+.sn2-row:hover { background: var(--p50) !important; }
+.sn2-pill { transition: background .12s ease; }
+.sn2-pill:hover { background: var(--p50) !important; }
+.sn2-clamp2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.sn2-hscroll::-webkit-scrollbar { height: 0; width: 6px; }
+.sn2-hscroll::-webkit-scrollbar-thumb { background: #c9d4db; border-radius: 6px; }
+
+/* siqilgan ustun */
+.sn2-strip { transition: background .12s ease; }
+.sn2-strip:hover { background: var(--p100) !important; }
+.sn2-vert { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
+
+/* daraja almashganda kontent o'ngdan siljib paydo bo'ladi */
+@keyframes sn2-in { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+.sn2-in { animation: sn2-in .22s ease; }
+
+.sn2 a:focus-visible, .sn2 button:focus-visible, .sn2 input:focus-visible { outline: 2px solid var(--btn); outline-offset: 2px; }
+.sn2 .sn2-sbox input:focus-visible { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sn2-sk, .sn2-go, .sn2-row, .sn2-pill, .sn2-strip { transition: none; }
+  .sn2-in { animation: none; }
+}
