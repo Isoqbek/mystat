@@ -35,7 +35,7 @@
 
 /* asosiy karta */
 .sn2-panel {
-  display: flex; align-items: stretch; overflow: hidden; min-height: 660px;
+  display: flex; align-items: stretch; overflow: hidden; min-height: 660px; /* yo'nalish: Tailwind (tor ekranda ustun) */
   border-radius: 22px; background: var(--sn-card); border: 1px solid var(--sn-line);
   box-shadow: 0 24px 48px -36px rgb(16 40 60 / .5);
 }
@@ -58,7 +58,8 @@
 /* siqilgan ustun */
 .sn2-strip { transition: background .12s ease; }
 .sn2-strip:hover { background: var(--p100) !important; }
-.sn2-vert { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
+.sn2-vert { white-space: nowrap; }
+@media (min-width: 768px) { .sn2-vert { writing-mode: vertical-rl; transform: rotate(180deg); } }
 
 /* daraja almashganda kontent o'ngdan siljib paydo bo'ladi */
 @keyframes sn2-in { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }

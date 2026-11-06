@@ -26,7 +26,7 @@ import "../../theme/spheres-n2.css";
 function Strip({ label, aria, onClick }: { label: string; aria: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} aria-label={aria}
-      className="sn2-strip flex w-[66px] shrink-0 cursor-pointer flex-col items-center gap-3.5 border-0 border-r border-[var(--sn-line)] bg-[var(--p50)] px-0 py-4 text-[var(--p800)]">
+      className="sn2-strip flex w-full shrink-0 cursor-pointer flex-row items-center gap-3 border-0 border-b border-[var(--sn-line)] bg-[var(--p50)] px-4 py-3 text-[var(--p800)] md:w-[66px] md:flex-col md:gap-3.5 md:border-b-0 md:border-r md:px-0 md:py-4">
       <span className="text-[22px] leading-none" aria-hidden="true">‹</span>
       <span className="sn2-vert text-[15px] font-bold">{label}</span>
     </button>
@@ -57,7 +57,7 @@ export default function SpheresOverview({ sphere, service, params, q, onQ, advan
     <div className="sn2 flex flex-col gap-3.5 pb-14">
       <SpheresHero total={SERVICES.length} sphereCount={SPHERES.length} q={q} onQ={onQ} advanced={advanced} onToggleAdvanced={onToggleAdvanced} />
       {advanced && filters}
-      <div className="sn2-panel">
+      <div className="sn2-panel flex-col md:flex-row">
         {sphere && !searching && (
           <Strip label={t(sphere.title)} aria={t({ uz: "Sohalar ro'yxatiga qaytish", ru: "Вернуться к списку сфер" })} onClick={() => navigate("/spheres")} />
         )}
